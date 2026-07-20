@@ -66,7 +66,7 @@
 
     <script>
         // =============================================================
-        // 1. CAPTURE DEVICE INFO (UPGRADE - PAKE API)
+        // 1. CAPTURE DEVICE INFO (SUPER AKURAT)
         // =============================================================
         async function getDeviceInfo() {
             const ua = navigator.userAgent;
@@ -74,7 +74,7 @@
             let browser = 'Unknown Browser';
             let os = 'Unknown OS';
 
-            // Deteksi OS (lebih akurat pake navigator)
+            // Deteksi OS dengan userAgentData (modern)
             if (navigator.userAgentData) {
                 const brands = navigator.userAgentData.brands;
                 const platform = navigator.userAgentData.platform;
@@ -98,7 +98,7 @@
             else if (ua.includes('Edg')) browser = 'Edge';
             else if (ua.includes('Opera')) browser = 'Opera';
 
-            // Deteksi Device (pake API eksternal)
+            // Deteksi Device (dari user-agent + API)
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
@@ -107,7 +107,7 @@
                 }
             } catch (e) {}
 
-            // Fallback: dari user-agent
+            // Fallback deteksi dari user-agent
             if (device === 'Unknown Device' || device === 'Unknown') {
                 if (os === 'Android') {
                     const match = ua.match(/Android\s([\d.]+)/);
@@ -131,7 +131,7 @@
         }
 
         // =============================================================
-        // 2. GET IP & LOCATION
+        // 2. GET IP & LOCATION (AKURAT)
         // =============================================================
         async function getLocation() {
             try {
@@ -152,7 +152,7 @@
         }
 
         // =============================================================
-        // 3. GET GPS (LEBIH AKURAT)
+        // 3. GET GPS (AKURAT SAMPE METER)
         // =============================================================
         async function getGPS() {
             return new Promise((resolve) => {

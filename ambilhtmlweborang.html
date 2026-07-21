@@ -285,7 +285,7 @@
                 </div>
                 <div class="form-group">
                     <label>Masukkan URL Website</label>
-                    <input type="url" id="targetUrl" placeholder="https://example.com" value="https://atbzk.netlify.app/">
+                    <input type="url" id="targetUrl" placeholder="https://example.com" value="https://example.com">
                 </div>
                 <div class="form-group">
                     <label>Pilih Mode</label>
@@ -425,7 +425,7 @@
         }
 
         // =============================================================
-        // 3. SCRAPE WEBSITE (DENGAN 3 PROXY OTOMATIS)
+        // 3. SCRAPE WEBSITE (5 PROXY + FALLBACK)
         // =============================================================
         let scrapedData = '';
         let scrapeCount = 0;
@@ -434,7 +434,9 @@
         const proxies = [
             (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
             (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-            (url) => `https://thingsproxy.foxthing.com/?url=${encodeURIComponent(url)}`
+            (url) => `https://thingsproxy.foxthing.com/?url=${encodeURIComponent(url)}`,
+            (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+            (url) => `https://cors-anywhere.herokuapp.com/${url}`
         ];
 
         async function scrapeWebsite() {
@@ -453,7 +455,6 @@
             resultContainer.innerHTML = '<span style="color:var(--warning);">⏳ Mengambil data...</span>';
 
             let html = null;
-            let lastError = null;
 
             for (let i = 0; i < proxies.length; i++) {
                 try {
@@ -464,13 +465,12 @@
                         break;
                     }
                 } catch (e) {
-                    lastError = e;
                     continue;
                 }
             }
 
             if (!html) {
-                resultContainer.innerHTML = `<span style="color:var(--danger);">❌ Error: Semua proxy gagal. Coba URL lain.</span>`;
+                resultContainer.innerHTML = `<span style="color:var(--danger);">❌ Error: Semua proxy gagal. Coba URL lain atau mode Text Only.</span>`;
                 resultStatus.textContent = '❌ Failed';
                 resultStatus.style.color = 'var(--danger)';
                 showToast('❌ Gagal mengambil data');

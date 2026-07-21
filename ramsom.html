@@ -171,7 +171,6 @@
             font-size: 1rem;
             margin-top: 20px;
         }
-        /* Sembunyikan overlay setelah unlock */
         #overlay.hidden {
             display: none !important;
         }
@@ -259,7 +258,6 @@
             const box = document.getElementById('lockBox');
             const overlay = document.getElementById('overlay');
 
-            // Reset status
             status.className = 'status';
 
             if (password === '') {
@@ -269,11 +267,9 @@
             }
 
             if (password === '999') {
-                // ✅ PASSWORD BENAR
                 status.textContent = '✅ UNLOCKED! System restored.';
                 status.className = 'status success';
 
-                // Ubah tampilan
                 box.style.borderColor = '#00ff41';
                 box.style.boxShadow = '0 0 100px rgba(0,255,65,0.2)';
                 document.querySelector('h1').textContent = '✅ SYSTEM UNLOCKED';
@@ -283,32 +279,25 @@
                 document.querySelector('.input-area').style.display = 'none';
                 document.querySelector('.footer').textContent = '🔐 NEONDARK SECURE • ' + new Date().toLocaleString('id-ID');
 
-                // Sembunyikan overlay fullscreen
                 overlay.classList.add('hidden');
-
-                // Hapus efek flash
                 box.classList.remove('flash');
 
-                // Notif sukses
                 setTimeout(() => {
                     alert('✅ SYSTEM UNLOCKED! Your files are safe.');
                 }, 500);
 
             } else {
-                // ❌ PASSWORD SALAH
                 status.textContent = '❌ WRONG KEY! Access denied.';
                 status.className = 'status error';
                 input.value = '';
                 input.focus();
 
-                // Efek kedip merah
                 box.style.borderColor = '#ff0000';
                 box.style.boxShadow = '0 0 150px rgba(255,0,0,0.6)';
                 setTimeout(() => {
                     box.style.boxShadow = '0 0 100px rgba(255,0,0,0.2)';
                 }, 500);
 
-                // Flash overlay merah
                 const overlay2 = document.getElementById('overlay');
                 overlay2.style.background = 'rgba(255,0,0,0.2)';
                 setTimeout(() => {
@@ -331,11 +320,8 @@
         // ============================================================
         window.addEventListener('load', () => {
             document.getElementById('pw').focus();
-
-            // Tampilkan overlay
             document.getElementById('overlay').classList.remove('hidden');
 
-            // Fullscreen request (kalo di browser)
             try {
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen();
@@ -347,7 +333,6 @@
         // 5. BLOKIR TOMBOL BACK / CLOSE
         // ============================================================
         document.addEventListener('keydown', function(e) {
-            // Blokir F12, Ctrl+Shift+I, Ctrl+U, dll
             if (e.key === 'F12' ||
                 (e.ctrlKey && e.shiftKey && e.key === 'I') ||
                 (e.ctrlKey && e.key === 'U') ||
@@ -389,9 +374,6 @@
         console.log('%cPassword: 999', 'color: #00ff41; font-size: 16px;');
         console.log('%c⚠️ HANYA UNTUK EDUKASI!', 'color: #ff4444; font-size: 14px;');
 
-        // ============================================================
-        // 10. TAMPILAN AWAL
-        // ============================================================
         console.log('✅ Ransomware siap! Password: 999');
     </script>
 </body>

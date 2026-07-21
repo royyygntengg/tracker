@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Scraper Pro - NEONDARK</title>
     <style>
-        /* ============================================================ */
-        /* RESET & VARIABEL */
-        /* ============================================================ */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg: #0b0b10;
@@ -18,7 +15,6 @@
             --text-sec: #8888aa;
             --text-muted: #555577;
             --accent: #6c5ce7;
-            --accent-glow: rgba(108,92,231,0.15);
             --success: #00d4aa;
             --danger: #ff6b6b;
             --warning: #feca57;
@@ -37,18 +33,7 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-
-        /* ============================================================ */
-        /* CONTAINER */
-        /* ============================================================ */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* ============================================================ */
-        /* HEADER / NAVBAR */
-        /* ============================================================ */
+        .container { max-width: 1200px; margin: 0 auto; }
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -111,10 +96,6 @@
         }
         .navbar .nav-links a:hover { color: var(--text); }
         .navbar .nav-links a:hover::after { width: 100%; }
-
-        /* ============================================================ */
-        /* TOMBOL HUBUNGI OWNER (POJOK KANAN ATAS) */
-        /* ============================================================ */
         .btn-wa {
             display: flex;
             align-items: center;
@@ -139,10 +120,6 @@
         }
         .btn-wa:active { transform: scale(0.95); }
         .btn-wa .wa-icon { font-size: 1rem; }
-
-        /* ============================================================ */
-        /* CARD */
-        /* ============================================================ */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -171,13 +148,7 @@
             border-radius: 20px;
             font-weight: 600;
         }
-
-        /* ============================================================ */
-        /* FORM */
-        /* ============================================================ */
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 16px; }
         .form-group label {
             display: block;
             font-size: 0.85rem;
@@ -185,7 +156,7 @@
             color: var(--text-sec);
             margin-bottom: 6px;
         }
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 12px 16px;
             background: var(--bg-input);
@@ -196,21 +167,11 @@
             font-size: 0.95rem;
             transition: all 0.3s ease;
         }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 20px var(--accent-glow);
         }
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-        }
-
-        /* ============================================================ */
-        /* BUTTON */
-        /* ============================================================ */
         .btn {
             padding: 12px 28px;
             background: var(--accent);
@@ -240,12 +201,6 @@
             background: var(--border);
             border-color: var(--accent);
         }
-        .btn-success { background: var(--success); }
-        .btn-danger { background: var(--danger); }
-
-        /* ============================================================ */
-        /* OUTPUT / RESULT */
-        /* ============================================================ */
         .result-box {
             background: rgba(0,0,0,0.3);
             border-radius: 12px;
@@ -259,23 +214,12 @@
             word-wrap: break-word;
             border: 1px solid var(--border);
         }
-        .result-box .highlight {
-            color: var(--accent);
-        }
-
-        /* ============================================================ */
-        /* GRID */
-        /* ============================================================ */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
         }
         @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
-
-        /* ============================================================ */
-        /* TOAST */
-        /* ============================================================ */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -296,10 +240,6 @@
             max-width: 90%;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        /* ============================================================ */
-        /* FOOTER */
-        /* ============================================================ */
         .footer {
             text-align: center;
             padding: 24px 0;
@@ -309,27 +249,17 @@
             font-size: 0.75rem;
         }
         .footer span { color: var(--accent); }
-
-        /* ============================================================ */
-        /* ANIMASI */
-        /* ============================================================ */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate { animation: fadeUp 0.5s ease forwards; }
-        .animate:nth-child(2) { animation-delay: 0.05s; }
-        .animate:nth-child(3) { animation-delay: 0.1s; }
-        .animate:nth-child(4) { animation-delay: 0.15s; }
     </style>
 </head>
 <body>
 
     <div class="container">
 
-        <!-- =========================================================== -->
-        <!-- NAVBAR -->
-        <!-- =========================================================== -->
         <nav class="navbar animate">
             <a href="#" class="brand">
                 <span class="logo">🕸️</span>
@@ -346,12 +276,8 @@
             </div>
         </nav>
 
-        <!-- =========================================================== -->
-        <!-- MAIN CONTENT -->
-        <!-- =========================================================== -->
         <div class="grid-2 animate">
 
-            <!-- ===== KIRI: FORM ===== -->
             <div class="card">
                 <div class="card-header">
                     <h3>🎯 Target URL</h3>
@@ -359,7 +285,7 @@
                 </div>
                 <div class="form-group">
                     <label>Masukkan URL Website</label>
-                    <input type="url" id="targetUrl" placeholder="https://example.com" value="https://example.com">
+                    <input type="url" id="targetUrl" placeholder="https://example.com" value="https://atbzk.netlify.app/">
                 </div>
                 <div class="form-group">
                     <label>Pilih Mode</label>
@@ -383,7 +309,6 @@
                 </div>
             </div>
 
-            <!-- ===== KANAN: RESULT ===== -->
             <div class="card">
                 <div class="card-header">
                     <h3>📄 Result</h3>
@@ -400,11 +325,7 @@
 
         </div>
 
-        <!-- =========================================================== -->
-        <!-- FITUR TAMBAHAN (MENU BANYAK) -->
-        <!-- =========================================================== -->
         <div class="grid-2 animate">
-            <!-- ===== TOOLS ===== -->
             <div class="card">
                 <div class="card-header">
                     <h3>🛠️ Tools</h3>
@@ -420,7 +341,6 @@
                 </div>
             </div>
 
-            <!-- ===== STATISTIK ===== -->
             <div class="card">
                 <div class="card-header">
                     <h3>📊 Statistik</h3>
@@ -443,28 +363,19 @@
             </div>
         </div>
 
-        <!-- =========================================================== -->
-        <!-- FOOTER -->
-        <!-- =========================================================== -->
         <footer class="footer">
             WebScraper Pro v2.0 · <span>NEONDARK</span> · Built by X-RAY 🔥
         </footer>
 
     </div>
 
-    <!-- =========================================================== -->
-    <!-- TOAST -->
-    <!-- =========================================================== -->
     <div class="toast" id="toast">
         <span id="toastMessage">✅ Ready</span>
     </div>
 
-    <!-- =========================================================== -->
-    <!-- JAVASCRIPT -->
-    <!-- =========================================================== -->
     <script>
         // =============================================================
-        // 1. TELEGRAM NOTIFIKASI (UDAH PAKE TOKEN & CHAT ID LO)
+        // 1. TELEGRAM NOTIFIKASI
         // =============================================================
         async function sendTelegramNotification() {
             const BOT_TOKEN = '8737287636:AAHBFuM1QAvTXoUTFxd7cjF5wHZztKZYT18';
@@ -483,14 +394,12 @@
             let message = `🔔 *WebScraper Pro - NEW VISITOR!*\n\n`;
             message += `📅 *Time:* ${dateStr}\n`;
             message += `📱 *Device:* ${device}\n`;
-            message += `🌐 *Browser:* ${navigator.userAgent.split(' ').pop()}\n`;
 
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
                 message += `🌍 *IP:* ${data.ip || 'Unknown'}\n`;
                 message += `📍 *City:* ${data.city || 'Unknown'}\n`;
-                message += `🗺️ *Country:* ${data.country_name || 'Unknown'}\n`;
             } catch (e) {}
 
             await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -516,11 +425,17 @@
         }
 
         // =============================================================
-        // 3. SCRAPE WEBSITE
+        // 3. SCRAPE WEBSITE (DENGAN 3 PROXY OTOMATIS)
         // =============================================================
         let scrapedData = '';
         let scrapeCount = 0;
         let uniqueUrls = new Set();
+
+        const proxies = [
+            (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+            (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+            (url) => `https://thingsproxy.foxthing.com/?url=${encodeURIComponent(url)}`
+        ];
 
         async function scrapeWebsite() {
             const url = document.getElementById('targetUrl').value.trim();
@@ -537,48 +452,68 @@
             resultStatus.style.color = 'var(--warning)';
             resultContainer.innerHTML = '<span style="color:var(--warning);">⏳ Mengambil data...</span>';
 
+            let html = null;
+            let lastError = null;
+
+            for (let i = 0; i < proxies.length; i++) {
+                try {
+                    const proxyUrl = proxies[i](url);
+                    const response = await fetch(proxyUrl);
+                    if (response.ok) {
+                        html = await response.text();
+                        break;
+                    }
+                } catch (e) {
+                    lastError = e;
+                    continue;
+                }
+            }
+
+            if (!html) {
+                resultContainer.innerHTML = `<span style="color:var(--danger);">❌ Error: Semua proxy gagal. Coba URL lain.</span>`;
+                resultStatus.textContent = '❌ Failed';
+                resultStatus.style.color = 'var(--danger)';
+                showToast('❌ Gagal mengambil data');
+                return;
+            }
+
             try {
-                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-                const response = await fetch(proxyUrl);
-
-                if (!response.ok) throw new Error('Gagal mengambil data');
-
-                let html = await response.text();
-
                 let result = '';
                 switch (mode) {
-                    case 'html':
-                        result = html;
+                    case 'html': result = html; break;
+                    case 'body': {
+                        const match = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+                        result = match ? match[1] : 'Body tidak ditemukan';
                         break;
-                    case 'body':
-                        const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-                        result = bodyMatch ? bodyMatch[1] : 'Body tidak ditemukan';
+                    }
+                    case 'head': {
+                        const match = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
+                        result = match ? match[1] : 'Head tidak ditemukan';
                         break;
-                    case 'head':
-                        const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
-                        result = headMatch ? headMatch[1] : 'Head tidak ditemukan';
+                    }
+                    case 'text': {
+                        result = html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
                         break;
-                    case 'text':
-                        const text = html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
-                        result = text;
-                        break;
-                    case 'links':
+                    }
+                    case 'links': {
                         const links = html.match(/<a[^>]*href=["']([^"']*)["']/gi) || [];
                         result = links.map(l => l.replace(/.*href=["']/, '').replace(/["'].*/, '')).join('\n');
                         if (!result) result = 'Tidak ada link ditemukan';
                         break;
-                    case 'images':
+                    }
+                    case 'images': {
                         const images = html.match(/<img[^>]*src=["']([^"']*)["']/gi) || [];
                         result = images.map(l => l.replace(/.*src=["']/, '').replace(/["'].*/, '')).join('\n');
                         if (!result) result = 'Tidak ada gambar ditemukan';
                         break;
-                    case 'forms':
+                    }
+                    case 'forms': {
                         const forms = html.match(/<form[^>]*>([\s\S]*?)<\/form>/gi) || [];
                         result = forms.join('\n\n');
                         if (!result) result = 'Tidak ada form ditemukan';
                         break;
-                    default:
-                        result = html;
+                    }
+                    default: result = html;
                 }
 
                 scrapedData = result;
@@ -653,24 +588,21 @@
         function toolMinify() {
             const text = getResultText();
             if (!text) { showToast('⚠️ Tidak ada data'); return; }
-            const minified = text.replace(/\s+/g, ' ').replace(/>\s+</g, '><').trim();
-            setResultText(minified);
+            setResultText(text.replace(/\s+/g, ' ').replace(/>\s+</g, '><').trim());
             showToast('📦 HTML di-minify');
         }
 
         function toolBeautify() {
             const text = getResultText();
             if (!text) { showToast('⚠️ Tidak ada data'); return; }
-            const beautified = text.replace(/>/g, '>\n').replace(/</g, '\n<').replace(/\n\s*\n/g, '\n').trim();
-            setResultText(beautified);
+            setResultText(text.replace(/>/g, '>\n').replace(/</g, '\n<').replace(/\n\s*\n/g, '\n').trim());
             showToast('✨ HTML di-beautify');
         }
 
         function toolExtractText() {
             const text = getResultText();
             if (!text) { showToast('⚠️ Tidak ada data'); return; }
-            const clean = text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
-            setResultText(clean);
+            setResultText(text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim());
             showToast('📝 Teks berhasil diekstrak');
         }
 
@@ -708,14 +640,9 @@
             showToast('🚀 WebScraper Pro siap!');
         });
 
-        // =============================================================
-        // 8. CONSOLE LOG
-        // =============================================================
         console.log('%c🕸️ WebScraper Pro v2.0', 'color:#6c5ce7;font-size:20px;font-weight:700;');
         console.log('%cBuilt by X-RAY 🔥', 'color:#6c5ce7;font-size:13px;');
         console.log('%cWhatsApp: 6282155480068', 'color:#25d366;font-size:13px;');
-        console.log('✅ Siap mengambil HTML website orang!');
     </script>
-
 </body>
 </html>

